@@ -11,8 +11,8 @@ import hashlib
 from datetime import datetime
 from contextlib import contextmanager
 from flask_bcrypt import Bcrypt
-from config import DATABASE, SETORES_PADRAO, SECURITY
-from models import ALL_TABLES
+from src.config import DATABASE, SETORES_PADRAO, SECURITY
+from src.models import ALL_TABLES
 
 # Configurar logging
 logger = logging.getLogger(__name__)

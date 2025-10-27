@@ -17,8 +17,8 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import black
 
-from config import DIRECTORIES
-from database import get_db_connection
+from src.config import DIRECTORIES
+from src.core.database import get_db_connection
 
 logger = logging.getLogger(__name__)
 

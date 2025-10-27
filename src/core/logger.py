@@ -7,7 +7,7 @@ Configura logging em arquivo e console
 import logging
 import os
 from logging.handlers import RotatingFileHandler
-from config import LOGS, DIRECTORIES
+from src.config import LOGS, DIRECTORIES
 
 
 def setup_logging(app=None):

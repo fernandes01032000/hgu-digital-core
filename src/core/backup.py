@@ -10,8 +10,8 @@ import hashlib
 import sqlite3
 import logging
 from datetime import datetime, timedelta
-from config import DATABASE, DIRECTORIES, BACKUP
-from database import get_db_connection
+from src.config import DATABASE, DIRECTORIES, BACKUP
+from src.core.database import get_db_connection
 
 logger = logging.getLogger(__name__)
 

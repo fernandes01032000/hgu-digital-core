@@ -16,25 +16,25 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 # Importar módulos do sistema
-from config import (
+from src.config import (
     SERVER, SECURITY, SYSTEM_CONFIG, TIPOS_DOCUMENTOS,
     STATUS_AUDITORIA, NIVEIS_ACESSO, RATE_LIMITING, DATABASE
 )
-from database import (
+from src.core.database import (
     inicializar_db, verificar_setup_inicial, salvar_configuracao,
     obter_configuracao, criar_setores_padrao, criar_usuario_admin,
     registrar_log, listar_setores, cadastrar_paciente, cadastrar_profissional,
     criar_documento, listar_documentos, buscar_paciente_por_prec, listar_profissionais,
     init_bcrypt, verificar_senha, get_db_connection
 )
-from pdf_generator import gerar_pdf_documento
-from schemas import (
+from src.services.pdf_generator import gerar_pdf_documento
+from src.schemas import (
     LoginSchema, SetupSchema, PacienteSchema, ProfissionalSchema,
     DocumentoSchema, validate_request
 )
-from logger import setup_logging, log_api_call
-from utils import find_free_port, get_local_ip
-from security import add_security_headers, validate_content_type, sanitize_filename, log_security_event
+from src.core.logger import setup_logging, log_api_call
+from src.utils.helpers import find_free_port, get_local_ip
+from src.core.security import add_security_headers, validate_content_type, sanitize_filename, log_security_event
 
 # Criar aplicação Flask
 app = Flask(__name__)

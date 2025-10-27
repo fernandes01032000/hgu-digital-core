@@ -13,10 +13,10 @@ import os
 from getpass import getpass
 
 # Adicionar diretório pai ao path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from config import DATABASE
-from database import get_db_connection, init_bcrypt
+from src.config import DATABASE
+from src.core.database import get_db_connection, init_bcrypt
 from flask import Flask
 
 print("=" * 70)

@@ -12,7 +12,7 @@ from reportlab.platypus import Paragraph, Table, TableStyle
 from reportlab.lib import colors
 from datetime import datetime
 import os
-from config import DIRECTORIES, CORES
+from src.config import DIRECTORIES, CORES
 
 
 def gerar_pdf_documento(codigo_documento, tipo_documento, dados_documento, caminho_saida=None):

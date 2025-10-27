@@ -10,6 +10,7 @@
 
 ## 📋 Índice
 
+- [⚡ Quick Start](#-quick-start)
 - [Sobre o Projeto](#-sobre-o-projeto)
 - [Características](#-características)
 - [Instalação](#-instalação)
@@ -20,6 +21,54 @@
 - [Backup](#-backup)
 - [Troubleshooting](#-troubleshooting)
 - [Contribuindo](#-contribuindo)
+
+---
+
+## ⚡ Quick Start
+
+**5 minutos para o sistema funcionar!**
+
+```bash
+# 1. Instalar dependências
+pip install -r requirements.txt
+
+# 2. Executar servidor
+python app.py
+
+# 3. Acessar no navegador
+# http://localhost:8080
+```
+
+### Primeiro Acesso
+
+1. **Configure o sistema**: Preencha dados do hospital
+2. **Crie o administrador**:
+   - Login: `admin`
+   - Senha: mínimo 8 caracteres, com maiúscula, minúscula e número
+   - Exemplo: `Admin2025!`
+3. **Faça login** e pronto!
+
+### Acesso em Rede Local
+
+**Windows**: Execute `ipconfig` para ver o IP (ex: `192.168.1.100`)
+**Outros PCs**: Acesse `http://192.168.1.100:8080`
+
+### Comandos Úteis
+
+```bash
+make help      # Ver todos os comandos
+make test      # Executar testes
+make backup    # Criar backup
+make clean     # Limpar arquivos temporários
+```
+
+### Problemas?
+
+- **Porta em uso?** O sistema detecta automaticamente outra porta
+- **Erro ao instalar?** Execute `python -m pip install --upgrade pip`
+- **Esqueceu a senha?** Execute `python scripts/migrate_passwords.py`
+
+📚 **Documentação completa**: Continue lendo abaixo!
 
 ---
 

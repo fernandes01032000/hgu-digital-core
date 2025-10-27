@@ -6,8 +6,13 @@ Adiciona a tabela template_fields ao banco de dados existente
 
 import sqlite3
 import sys
-from config import DATABASE
-from models import SQL_CREATE_TEMPLATE_FIELDS, SQL_CREATE_INDEX_TEMPLATE_FIELDS
+import os
+
+# Adicionar diretório pai ao path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from src.config import DATABASE
+from src.models import SQL_CREATE_TEMPLATE_FIELDS, SQL_CREATE_INDEX_TEMPLATE_FIELDS
 
 
 def migrate():
