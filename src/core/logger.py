@@ -72,7 +72,7 @@ def log_security_event(event_type, message, user_id=None, ip_address=None, extra
 
     log_data = {
         'event': event_type,
-        'message': message,
+        'event_message': message,
         'user_id': user_id,
         'ip': ip_address,
     }

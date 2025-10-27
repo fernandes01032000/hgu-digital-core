@@ -53,7 +53,7 @@ def gerar_pdf_documento(codigo_documento, tipo_documento, dados_documento, camin
     c.setFont("Helvetica-Bold", 16)
     
     # Nome do hospital (obtido das configurações)
-    from database import obter_configuracao
+    from src.core.database import obter_configuracao
     nome_hospital = obter_configuracao('nome_hospital', 'Hospital Militar')
     sigla_oms = obter_configuracao('sigla_oms', '')
     
