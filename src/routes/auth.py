@@ -10,12 +10,12 @@ from flask_limiter.util import get_remote_address
 import logging
 from datetime import datetime
 
-from database import (
+from src.core.database import (
     verificar_setup_inicial, salvar_configuracao, criar_setores_padrao,
     criar_usuario_admin, verificar_senha, registrar_log, get_db_connection
 )
-from schemas import LoginSchema, SetupSchema
-from security import log_security_event
+from src.schemas import LoginSchema, SetupSchema
+from src.core.security import log_security_event
 
 logger = logging.getLogger(__name__)
 
