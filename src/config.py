@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 # Carregar variáveis de ambiente
 load_dotenv()
 
-# Diretório base do projeto
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Diretório base do projeto (raiz, não src/)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Configurações do Banco de Dados
 DATABASE = {
@@ -141,7 +141,7 @@ def validar_configuracao():
     Gera automaticamente se não existir arquivo .env
     """
     import sys
-    from utils import generate_secret_key, generate_salt
+    from src.utils.helpers import generate_secret_key, generate_salt
 
     env_file = os.path.join(BASE_DIR, '.env')
 

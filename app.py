@@ -734,8 +734,8 @@ def auditoria():
 # ROTAS - PDF FORM BUILDER
 # ============================================================================
 
-import pdf_builder
-from schemas import PDFTemplateUploadSchema, SaveTemplateFieldsSchema, GeneratePDFSchema
+from src.services import pdf_builder
+from src.schemas import PDFTemplateUploadSchema, SaveTemplateFieldsSchema, GeneratePDFSchema
 
 @app.route('/pdf-builder')
 @login_requerido

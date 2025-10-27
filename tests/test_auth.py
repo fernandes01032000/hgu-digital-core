@@ -5,7 +5,7 @@ Testa login, logout e controle de acesso
 """
 
 import pytest
-from database import criar_usuario_admin, criar_usuario
+from src.core.database import criar_usuario_admin, criar_usuario
 
 
 class TestLogin:

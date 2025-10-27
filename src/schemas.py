@@ -5,7 +5,7 @@ Usa Marshmallow para validar dados de entrada da API
 """
 
 from marshmallow import Schema, fields, validates, ValidationError, validate
-from utils import validate_prec_cp
+from src.utils.helpers import validate_prec_cp
 
 
 class LoginSchema(Schema):

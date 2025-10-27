@@ -6,7 +6,7 @@ Testa schemas Marshmallow
 
 import pytest
 from marshmallow import ValidationError
-from schemas import (
+from src.schemas import (
     LoginSchema, PacienteSchema, ProfissionalSchema,
     SetupSchema, DocumentoSchema
 )

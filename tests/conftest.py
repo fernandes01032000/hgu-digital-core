@@ -19,7 +19,7 @@ def app():
     Fixture que cria uma instância da aplicação Flask para testes
     """
     from app import app as flask_app
-    from config import DATABASE
+    from src.config import DATABASE
 
     # Configurar para modo de teste
     flask_app.config['TESTING'] = True
@@ -30,7 +30,7 @@ def app():
     DATABASE['name'] = db_path
 
     # Criar tabelas
-    from database import inicializar_db
+    from src.core.database import inicializar_db
     inicializar_db()
 
     yield flask_app
@@ -62,7 +62,7 @@ def auth_client(client, app):
     Fixture que retorna um cliente autenticado como administrador
     """
     # Criar usuário admin de teste
-    from database import criar_usuario_admin
+    from src.core.database import criar_usuario_admin
 
     criar_usuario_admin('admin_test', 'TestPass123!', 'Administrador Teste')
 

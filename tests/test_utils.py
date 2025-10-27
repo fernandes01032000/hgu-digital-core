@@ -5,7 +5,7 @@ Testa funções utilitárias do sistema
 """
 
 import pytest
-from utils import (
+from src.utils.helpers import (
     find_free_port, validate_prec_cp, sanitize_filename,
     generate_secret_key, generate_salt
 )

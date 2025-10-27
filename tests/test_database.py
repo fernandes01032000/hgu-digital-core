@@ -5,7 +5,7 @@ Testa operações de banco de dados
 """
 
 import pytest
-from database import (
+from src.core.database import (
     get_db_connection, criar_usuario_admin, criar_usuario,
     verificar_senha, cadastrar_paciente, cadastrar_profissional,
     criar_setores_padrao, listar_setores
