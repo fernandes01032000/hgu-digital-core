@@ -1,674 +1,483 @@
-# 🏛️ HGU Digital Core v2.0
+<div align="center">
 
-**Sistema de Gestão Hospitalar Militar - 100% Offline, Seguro e Auditável**
+# 🏛️ HGU Digital Core
+
+### Sistema de Gestão Hospitalar Militar
+**100% Offline • Seguro • Auditável • Open Architecture**
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![Flask](https://img.shields.io/badge/flask-3.0.0-green.svg)](https://flask.palletsprojects.com/)
-[![License](https://img.shields.io/badge/license-Proprietário-red.svg)]()
+[![Flask 3.0](https://img.shields.io/badge/flask-3.0.0-green.svg)](https://flask.palletsprojects.com/)
+[![SQLite](https://img.shields.io/badge/database-SQLite-003B57.svg)](https://www.sqlite.org/)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Tests](https://img.shields.io/badge/tests-75%25-yellow.svg)](tests/)
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+
+[Funcionalidades](#-funcionalidades) •
+[Instalação](#-instalação-rápida) •
+[Documentação](#-documentação) •
+[Segurança](#-segurança) •
+[Changelog](CHANGELOG.md)
+
+</div>
 
 ---
 
-## 📋 Índice
+## 📖 O Que É?
 
-- [⚡ Quick Start](#-quick-start)
-- [Sobre o Projeto](#-sobre-o-projeto)
-- [Características](#-características)
-- [Instalação](#-instalação)
-- [Uso](#-uso)
-- [Arquitetura](#-arquitetura)
-- [Segurança](#-segurança)
-- [Testes](#-testes)
-- [Backup](#-backup)
-- [Troubleshooting](#-troubleshooting)
-- [Contribuindo](#-contribuindo)
+O **HGU Digital Core** é um sistema completo de gestão hospitalar desenvolvido especialmente para **Hospitais de Guarnição (HGU)** das Forças Armadas Brasileiras. Projetado para funcionar **100% offline**, sem qualquer dependência de internet, garantindo autonomia operacional em qualquer situação.
 
----
+### 🎯 Por Que Usar?
 
-## ⚡ Quick Start
-
-**5 minutos para o sistema funcionar!**
-
-```bash
-# 1. Instalar dependências
-pip install -r requirements.txt
-
-# 2. Executar servidor
-python app.py
-
-# 3. Acessar no navegador
-# http://localhost:8080
-```
-
-### Primeiro Acesso
-
-1. **Configure o sistema**: Preencha dados do hospital
-2. **Crie o administrador**:
-   - Login: `admin`
-   - Senha: mínimo 8 caracteres, com maiúscula, minúscula e número
-   - Exemplo: `Admin2025!`
-3. **Faça login** e pronto!
-
-### Acesso em Rede Local
-
-**Windows**: Execute `ipconfig` para ver o IP (ex: `192.168.1.100`)
-**Outros PCs**: Acesse `http://192.168.1.100:8080`
-
-### Comandos Úteis
-
-```bash
-make help      # Ver todos os comandos
-make test      # Executar testes
-make backup    # Criar backup
-make clean     # Limpar arquivos temporários
-```
-
-### Problemas?
-
-- **Porta em uso?** O sistema detecta automaticamente outra porta
-- **Erro ao instalar?** Execute `python -m pip install --upgrade pip`
-- **Esqueceu a senha?** Execute `python scripts/migrate_passwords.py`
-
-📚 **Documentação completa**: Continue lendo abaixo!
+- 🔒 **Segurança em Primeiro Lugar**: Bcrypt, CSRF Protection, Rate Limiting e auditoria completa
+- 🌐 **Totalmente Offline**: Não precisa de internet para funcionar
+- 💻 **Fácil de Instalar**: 3 comandos e está rodando
+- 🏥 **Específico para Militares**: Campos e fluxos adaptados para hospitais militares
+- 📝 **Código Limpo**: Python moderno, bem documentado e fácil de manter
+- 🧪 **Testado**: 36 testes automatizados garantem qualidade
+- 🔧 **Personalizável**: Código aberto para adaptações
 
 ---
 
-## 🎯 Sobre o Projeto
+## ✨ Funcionalidades
 
-O **HGU Digital Core** é um sistema de gestão hospitalar militar projetado para operar **100% offline**, sem qualquer dependência de internet ou serviços externos. Foi desenvolvido com foco em:
+<table>
+<tr>
+<td width="50%">
 
-- ✅ **Simplicidade**: Código limpo e bem documentado em português
-- ✅ **Segurança**: Múltiplas camadas de proteção e auditoria
-- ✅ **Manutenibilidade**: Fácil de entender e modificar
-- ✅ **Confiabilidade**: Testes automatizados e backup integrado
+### 👥 Gestão de Pessoas
+- **Pacientes Militares**: Cadastro com PREC/CP
+- **Profissionais de Saúde**: Médicos, enfermeiros, técnicos
+- **Níveis de Acesso**: Admin, auditor, operador
+- **Autenticação Segura**: Login com hash Bcrypt
 
-### Novidades na Versão 2.0
+</td>
+<td width="50%">
 
-- 🔐 **Segurança aprimorada** com Bcrypt, CSRF Protection e Rate Limiting
-- 🧪 **Testes automatizados** com cobertura de código
-- 💾 **Sistema de backup** automático com verificação de integridade
-- 📝 **Logging completo** com rotação de arquivos
-- ✔️ **Validação de dados** com schemas Marshmallow
-- 🚪 **Detecção automática de porta** disponível
-- 🛡️ **Controle de acesso** baseado em roles (RBAC)
+### 📋 Documentos Médicos
+- **Guias de Encaminhamento**
+- **Atestados Médicos**
+- **Relatórios Hospitalares**
+- **Geração de PDF**: Templates customizáveis
+- **PDF Builder**: Construtor visual de formulários
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+### 📊 Gestão e Controle
+- **Dashboard Executivo**: Estatísticas em tempo real
+- **Auditoria Completa**: Rastreio de todas as ações
+- **Relatórios Gerenciais**: Análises e métricas
+- **Setores Hospitalares**: Organização por setor
+
+</td>
+<td width="50%">
+
+### 🛡️ Segurança e Backup
+- **Rate Limiting**: Proteção contra ataques
+- **CSRF Protection**: Segurança em formulários
+- **Backup Automático**: Cópias com hash SHA256
+- **Logs Rotativos**: Histórico de ações
+- **Validação de Dados**: Schemas Marshmallow
+
+</td>
+</tr>
+</table>
 
 ---
 
-## ✨ Características
-
-### Módulos Implementados
-
-- **Autenticação e Autorização**: Login seguro com controle de acesso por níveis
-- **Gestão de Pacientes**: Cadastro e busca de pacientes militares
-- **Gestão de Profissionais**: Cadastro de médicos, enfermeiros e equipe
-- **Documentos Médicos**: Criação de guias, atestados, encaminhamentos
-- **Auditoria**: Rastreamento completo de todas as ações
-- **Relatórios**: Estatísticas e dashboards
-- **Backup Automático**: Cópias de segurança com verificação de integridade
-
-### Segurança
-
-- 🔒 Hash de senhas com **Bcrypt** (12 rounds)
-- 🛡️ Proteção **CSRF** em todas as rotas POST
-- 🚦 **Rate Limiting** para prevenir brute force
-- 📝 **Logging** completo de eventos de segurança
-- 🔐 Sessões seguras com cookies **HttpOnly** e **SameSite**
-- ✅ **Validação** rigorosa de todos os dados de entrada
-
-Para mais detalhes, consulte [SECURITY.md](SECURITY.md).
-
----
-
-## 🚀 Instalação
+## ⚡ Instalação Rápida
 
 ### Pré-requisitos
 
-- Python 3.8 ou superior
-- pip (gerenciador de pacotes Python)
-- SQLite (incluído com Python)
-
-### Instalação Rápida
-
-#### 1. Clone ou extraia o projeto
-
 ```bash
-cd /caminho/para/hgu_digital_core
+# Apenas Python 3.8+ é necessário
+python --version  # Deve ser 3.8 ou superior
 ```
 
-#### 2. Instale as dependências
+### Opção 1: Instalação Básica (3 comandos)
 
 ```bash
+# 1. Clone o repositório
+git clone https://github.com/fernandes01032000/hgu-digital-core.git
+cd hgu-digital-core
+
+# 2. Instale as dependências
 pip install -r requirements.txt
-```
 
-Ou use o Makefile:
-
-```bash
-make install
-```
-
-#### 3. Configure o ambiente (primeira vez)
-
-O sistema irá gerar automaticamente um arquivo `.env` com chaves seguras na primeira execução. Alternativamente, você pode copiar o arquivo de exemplo:
-
-```bash
-cp .env.example .env
-```
-
-E gerar suas próprias chaves:
-
-```python
-python -c "from utils import generate_secret_key, generate_salt; print(f'SECRET_KEY={generate_secret_key()}'); print(f'SALT={generate_salt()}')"
-```
-
-#### 4. Inicie o servidor
-
-```bash
+# 3. Inicie o servidor
 python app.py
 ```
 
-Ou:
+### Opção 2: Com Makefile (recomendado)
 
 ```bash
+# Clone o projeto
+git clone https://github.com/fernandes01032000/hgu-digital-core.git
+cd hgu-digital-core
+
+# Instale e execute
+make install
 make run
 ```
 
-O sistema irá:
-- Detectar automaticamente uma porta disponível (padrão: 8080)
-- Criar o banco de dados se não existir
-- Mostrar o endereço para acesso
+### 🎉 Pronto! Acesse o Sistema
 
-```
-======================================================================
-🏛️  HGU DIGITAL CORE - Sistema Offline v2.0
-======================================================================
-🌐 Servidor iniciando em http://0.0.0.0:8080
-📡 Acesse de outros computadores usando: http://192.168.1.100:8080
-🔒 Modo debug: DESATIVADO ✓
-🔐 CSRF Protection: ATIVADO ✓
-🛡️  Rate Limiting: ATIVADO ✓
-📝 Logging: ATIVADO ✓
-======================================================================
-```
+Abra seu navegador em: **http://localhost:8080**
 
 ---
 
-## 💻 Uso
+## 🚀 Primeiro Acesso
 
-### Primeiro Acesso - Setup Inicial
+### 1️⃣ Configuração Inicial
 
-1. Abra o navegador e acesse: `http://localhost:8080`
-2. Você será direcionado para a tela de configuração inicial
-3. Preencha os dados do hospital:
-   - Nome do Hospital
-   - Sigla OMS
-   - Região Militar
-   - Comando Vinculado
-   - Diretor Técnico
-   - Responsável de TI
-4. Crie o usuário administrador:
-   - Login (mínimo 3 caracteres)
-   - Senha forte (mínimo 8 caracteres, com maiúscula, minúscula e número)
-   - Nome completo
-5. Clique em "Configurar Sistema"
+Na primeira vez que acessar, você será direcionado para a tela de setup:
 
-### Login
+```
+📝 Preencha os dados:
+   • Nome do Hospital (ex: Hospital de Guarnição de Manaus)
+   • OMS (ex: 1º HGU)
+   • Região Militar (ex: 12ª RM)
+   • Diretor Técnico
+   • Responsável TI
+```
 
-1. Acesse `http://localhost:8080/login`
-2. Digite seu login e senha
-3. Você será direcionado para o dashboard
+### 2️⃣ Criar Administrador
 
-### Níveis de Acesso
+```
+👤 Dados do Admin:
+   • Login: admin (ou qualquer nome)
+   • Senha: Mínimo 8 caracteres
+           → Deve ter: maiúscula, minúscula e número
+           → Exemplo: Hospital@2025
+   • Nome completo do administrador
+```
 
-- **Administrador**: Acesso total, incluindo configurações e usuários
-- **Médico**: Pode criar documentos e gerenciar pacientes
-- **Auditor**: Acesso a auditoria e relatórios
-- **Visualizador**: Apenas leitura
+### 3️⃣ Fazer Login
 
-### Acesso em Rede Local
+Use as credenciais que você acabou de criar e acesse o **Dashboard**!
 
-Para acessar de outros computadores na mesma rede:
+---
 
-#### Windows
+## 🌐 Acesso em Rede Local
+
+### Descubra seu IP
+
+**Windows:**
 ```bash
 ipconfig
+# Procure "Endereço IPv4" → ex: 192.168.1.100
 ```
-Procure por "Endereço IPv4"
 
-#### Linux/Mac
+**Linux/Mac:**
 ```bash
-hostname -I
+ifconfig
+# ou
+ip addr show
 ```
 
-Nos outros computadores, acesse: `http://[IP_DO_SERVIDOR]:8080`
+### Acesse de Outros Computadores
+
+No navegador de qualquer computador na mesma rede:
+```
+http://192.168.1.100:8080
+```
+
+**Porta ocupada?** O sistema detecta automaticamente outra porta disponível!
 
 ---
 
-## 🏗️ Arquitetura
-
-### Tecnologias
-
-| Componente | Tecnologia | Versão |
-|------------|------------|--------|
-| Backend | Python + Flask | 3.0.0 |
-| Banco de Dados | SQLite | 3.x |
-| Hash de Senhas | Bcrypt | 1.0.1 |
-| Validação | Marshmallow | 3.20.1 |
-| PDF | ReportLab | 4.0.7 |
-| Testes | Pytest | 7.4.3 |
-
-### Estrutura do Projeto
+## 📁 Estrutura do Projeto
 
 ```
-hgu_digital_core/
-├── app.py                  # Aplicação principal Flask
-├── config.py               # Configurações do sistema
-├── database.py             # Operações de banco de dados
-├── models.py               # Modelos de dados (schemas SQL)
-├── schemas.py              # Validação de dados (Marshmallow)
-├── utils.py                # Funções utilitárias
-├── logger.py               # Sistema de logging
-├── backup.py               # Sistema de backup
-├── pdf_generator.py        # Geração de PDFs
-├── routes_backup.py        # Rotas de backup
-├── migrate_passwords.py    # Script de migração de senhas
-├── requirements.txt        # Dependências Python
-├── pytest.ini              # Configuração de testes
-├── Makefile                # Comandos úteis
-├── .env.example            # Template de variáveis de ambiente
-├── .gitignore              # Arquivos ignorados pelo Git
-├── README.md               # Esta documentação
-├── SECURITY.md             # Documentação de segurança
-├── static/                 # Arquivos estáticos
-│   ├── css/                # Estilos CSS
-│   ├── js/                 # JavaScript
-│   └── img/                # Imagens
-├── templates/              # Templates HTML
-│   ├── login.html
-│   ├── setup.html
-│   ├── dashboard.html
-│   ├── documentos.html
-│   ├── pacientes.html
-│   ├── profissionais.html
-│   ├── auditoria.html
-│   ├── relatorios.html
-│   ├── backup.html
-│   └── error.html
-├── tests/                  # Testes automatizados
-│   ├── __init__.py
-│   ├── conftest.py         # Fixtures pytest
-│   ├── test_auth.py        # Testes de autenticação
-│   ├── test_database.py    # Testes de banco de dados
-│   ├── test_schemas.py     # Testes de validação
-│   └── test_utils.py       # Testes de utilitários
-├── logs/                   # Logs do sistema (gerado)
-├── pdfs/                   # PDFs gerados (gerado)
-├── backups/                # Backups do banco (gerado)
-└── hgu_core.db             # Banco de dados (gerado)
+hgu-digital-core/
+├── 📱 app.py                  # Aplicação principal Flask
+├── 📂 src/                    # Código-fonte modular
+│   ├── core/                 # Funcionalidades essenciais
+│   │   ├── database.py       # Operações de banco de dados
+│   │   ├── security.py       # Segurança e autenticação
+│   │   ├── logger.py         # Sistema de logs
+│   │   └── backup.py         # Sistema de backup
+│   ├── services/             # Serviços de negócio
+│   │   ├── pdf_generator.py  # Geração de PDFs
+│   │   └── pdf_builder.py    # Construtor de formulários
+│   ├── routes/               # Rotas da API
+│   └── utils/                # Utilitários
+├── 🎨 templates/              # Interfaces HTML
+├── 📦 static/                 # CSS, JS, Imagens
+├── 🧪 tests/                  # Testes automatizados
+├── 📚 docs/                   # Documentação técnica
+├── 🔧 scripts/                # Scripts utilitários
+└── 📋 requirements.txt        # Dependências Python
 ```
 
-### Banco de Dados
-
-O sistema usa SQLite com as seguintes tabelas:
-
-- `configuracoes`: Configurações do sistema
-- `usuarios`: Usuários e credenciais
-- `setores`: Setores do hospital
-- `pacientes`: Dados de pacientes
-- `profissionais`: Profissionais de saúde
-- `documentos`: Documentos médicos
-- `auditoria`: Histórico de auditoria
-- `templates_pdf`: Templates de documentos
-- `logs`: Logs do sistema
-- `backups`: Registro de backups
+📖 **Ver estrutura completa**: [ESTRUTURA_PROJETO.md](ESTRUTURA_PROJETO.md)
 
 ---
 
-## 🔐 Segurança
-
-### Configurações Importantes
-
-#### Produção
-
-Antes de colocar em produção:
-
-1. Certifique-se de que `DEBUG=False` no `.env`
-2. Use chaves fortes e únicas para `SECRET_KEY` e `SALT`
-3. Configure HTTPS se possível
-4. Mantenha o sistema atualizado
-
-#### Senhas
-
-Requisitos mínimos:
-- 8 caracteres
-- 1 letra maiúscula
-- 1 letra minúscula
-- 1 número
-
-Recomendado:
-- 12+ caracteres
-- Caracteres especiais
-- Frases-senha
-
-### Migração de Senhas Antigas
-
-Se você está atualizando de uma versão anterior que usava SHA256:
+## 🔧 Comandos Úteis
 
 ```bash
-python migrate_passwords.py
+# Ver todos os comandos disponíveis
+make help
+
+# Executar testes
+make test
+pytest tests/ -v
+
+# Criar backup manual
+make backup
+
+# Limpar arquivos temporários
+make clean
+
+# Instalar dependências de desenvolvimento
+pip install -r requirements-dev.txt
+
+# Rodar linting
+flake8 src/
+black src/ --check
 ```
 
-Este script irá:
-1. Listar todos os usuários
-2. Solicitar nova senha para cada um
-3. Atualizar com hash Bcrypt seguro
+---
 
-### Checklist de Segurança
+## 🛡️ Segurança
 
-Consulte [SECURITY.md](SECURITY.md) para o checklist completo de segurança.
+O HGU Digital Core implementa **múltiplas camadas de segurança**:
+
+### Autenticação e Autorização
+- ✅ Hash de senhas com **Bcrypt** (12 rounds)
+- ✅ Controle de acesso baseado em **roles** (RBAC)
+- ✅ Sessões seguras com cookies **HttpOnly** e **SameSite**
+- ✅ Timeout automático de sessão
+
+### Proteção de Aplicação
+- ✅ **CSRF Protection** em todos os formulários
+- ✅ **Rate Limiting**: 5 tentativas de login em 5 minutos
+- ✅ **Validação de dados** com Marshmallow schemas
+- ✅ **Sanitização** de inputs
+
+### Auditoria e Logs
+- ✅ **Logging completo** de todas as ações
+- ✅ **Auditoria** de acessos e modificações
+- ✅ **Rotação de logs** (10MB por arquivo)
+- ✅ **Backup automático** com verificação SHA256
+
+📖 **Detalhes completos**: [SECURITY.md](SECURITY.md)
 
 ---
 
 ## 🧪 Testes
 
-### Executar Todos os Testes
+O projeto possui **36 testes automatizados**:
 
 ```bash
-make test
-```
-
-Ou diretamente:
-
-```bash
+# Executar todos os testes
 pytest
+
+# Com cobertura de código
+pytest --cov=src
+
+# Testes específicos
+pytest tests/test_auth.py -v
 ```
 
-### Testes com Cobertura
+### Cobertura por Módulo
 
-```bash
-make test-cov
-```
+| Módulo | Cobertura | Status |
+|--------|-----------|--------|
+| **Schemas** | 100% | ✅ |
+| **Utils** | 100% | ✅ |
+| **Database** | 83% | ✅ |
+| **Auth** | 75% | ⚠️ |
 
-Isso irá gerar um relatório HTML em `htmlcov/index.html`.
-
-### Testes Específicos
-
-```bash
-# Apenas testes de autenticação
-pytest tests/test_auth.py
-
-# Apenas testes de banco de dados
-pytest tests/test_database.py
-
-# Apenas testes unitários (rápidos)
-pytest -m unit
-
-# Verbose (mais detalhes)
-pytest -v
-```
-
-### Estrutura dos Testes
-
-- `test_auth.py`: Testes de login, logout e controle de acesso
-- `test_database.py`: Testes de operações de banco de dados
-- `test_schemas.py`: Testes de validação de dados
-- `test_utils.py`: Testes de funções utilitárias
+📊 **Relatório completo**: [RELATORIO_TESTES.md](RELATORIO_TESTES.md)
 
 ---
 
-## 💾 Backup
+## 📚 Documentação
+
+### Documentos Principais
+
+- 📖 [**README.md**](README.md) - Este arquivo (visão geral)
+- 🔐 [**SECURITY.md**](SECURITY.md) - Guia de segurança completo
+- 📋 [**CHANGELOG.md**](CHANGELOG.md) - Histórico de versões
+- 🏗️ [**ESTRUTURA_PROJETO.md**](ESTRUTURA_PROJETO.md) - Arquitetura detalhada
+
+### Documentação Técnica
+
+- 📄 [Bootstrap Implementation](docs/BOOTSTRAP_IMPLEMENTATION.md)
+- 📄 [PDF Builder API](docs/PDF_BUILDER_API.md)
+- 📄 [Relatório de Atualização v1.0 → v2.0](docs/RELATORIO_ATUALIZACAO.md)
+- 🔍 [Auditoria de Segurança](AUDITORIA_SEGURANCA.md)
+
+---
+
+## 🔄 Backup e Recuperação
 
 ### Criar Backup Manual
 
-Via interface web (como administrador):
-1. Acesse "Backup" no menu
-2. Clique em "Criar Backup"
-
-Via linha de comando:
-
 ```bash
+# Via comando Make
 make backup
+
+# Via Python
+python -c "from src.core.backup import realizar_backup; realizar_backup()"
 ```
 
-Ou diretamente:
+### Localização dos Backups
 
-```python
-python -c "from backup import realizar_backup; realizar_backup(tipo='manual')"
 ```
-
-### Backups Automáticos
-
-Configure no `.env`:
-
-```env
-BACKUP_AUTOMATICO=True
-BACKUP_HORA=23:00
-BACKUP_RETENCAO_DIAS=30
-```
-
-### Verificar Integridade
-
-```python
-from backup import verificar_integridade_backup
-resultado = verificar_integridade_backup(backup_id=1)
-print(resultado)
+backups/
+├── backup_2025-01-26_143022.db      # Arquivo do backup
+└── backup_2025-01-26_143022.hash    # Hash SHA256 para verificação
 ```
 
 ### Restaurar Backup
 
-**ATENÇÃO**: Isso irá substituir o banco de dados atual!
-
-```python
-from backup import restaurar_backup
-restaurar_backup(backup_id=1, usuario_id=1)
-```
-
-### Limpeza de Backups Antigos
-
-Backups mais antigos que o período de retenção são automaticamente removidos:
-
-```python
-from backup import limpar_backups_antigos
-removidos = limpar_backups_antigos()
-print(f"{removidos} backup(s) removido(s)")
+```bash
+python scripts/restore_backup.py backups/backup_2025-01-26_143022.db
 ```
 
 ---
 
-## 🔧 Troubleshooting
+## ❓ Troubleshooting
 
-### Porta em uso
+### Problema: Porta 8080 em uso
 
-**Problema**: "Address already in use" ou porta 8080 ocupada
+**Solução**: O sistema detecta automaticamente outra porta disponível (8081, 8082, etc.)
 
-**Solução**: O sistema agora detecta automaticamente uma porta disponível. Se quiser forçar uma porta específica:
+### Problema: Erro ao instalar dependências
 
-```env
-PORT=8090
-```
-
-### Erro ao instalar dependências
-
-**Problema**: `pip install` falha
-
-**Solução**:
 ```bash
-# Atualizar pip
+# Atualize o pip primeiro
 python -m pip install --upgrade pip
 
-# Tentar novamente
+# Instale novamente
 pip install -r requirements.txt
 ```
 
-### Banco de dados travado
+### Problema: Esqueci a senha do admin
 
-**Problema**: "database is locked"
-
-**Solução**:
-1. Certifique-se de que apenas uma instância do app está rodando
-2. Verifique se há processos Python travados: `ps aux | grep python`
-3. Em último caso, reinicie o servidor
-
-### Erro de importação
-
-**Problema**: "ModuleNotFoundError"
-
-**Solução**:
 ```bash
-# Verificar instalação
-pip list
-
-# Reinstalar dependências
-pip install -r requirements.txt --force-reinstall
+# Execute o script de reset de senha
+python scripts/migrate_passwords.py
 ```
 
-### Problemas de rede local
+### Problema: Banco de dados corrompido
 
-**Problema**: Outros computadores não conseguem acessar
-
-**Solução**:
-1. Verifique o firewall do servidor
-2. Windows: Painel de Controle → Firewall → Permitir aplicativo
-3. Adicione Python ou crie regra para porta 8080
-4. Verifique se estão na mesma rede
-
-### Senha esquecida
-
-**Problema**: Esqueci a senha do administrador
-
-**Solução**:
 ```bash
-python migrate_passwords.py
+# Restaure do backup mais recente
+python scripts/restore_backup.py backups/backup_MAIS_RECENTE.db
 ```
 
-Redefina a senha do usuário admin.
-
----
-
-## 🛠️ Comandos Úteis (Makefile)
+### Problema: Python não encontrado
 
 ```bash
-# Instalar dependências
-make install
+# Verifique se o Python está instalado
+python --version
+# ou
+python3 --version
 
-# Executar servidor
-make run
-
-# Executar testes
-make test
-
-# Testes com cobertura
-make test-cov
-
-# Criar backup
-make backup
-
-# Migrar senhas
-make migrate
-
-# Limpar arquivos temporários
-make clean
-
-# Configurar ambiente de desenvolvimento
-make setup-dev
-
-# Verificar código (lint)
-make lint
-
-# Ver todos os comandos
-make help
+# Se não estiver, instale:
+# Windows: https://www.python.org/downloads/
+# Linux: sudo apt install python3 python3-pip
+# Mac: brew install python3
 ```
 
 ---
 
-## 📊 Estatísticas do Projeto
+## 🗺️ Roadmap
 
-- **Linhas de código**: ~8.000+
-- **Arquivos Python**: 15+
-- **Templates HTML**: 10+
-- **Testes**: 40+
-- **Cobertura de código**: 85%+
+### ✅ Versão 2.0 (Atual)
+- ✅ Estrutura modular com /src
+- ✅ Testes automatizados (75%+)
+- ✅ Segurança enterprise-grade
+- ✅ PDF Builder interativo
+- ✅ Backup automático
 
----
+### 🔮 Versão 2.1 (Próxima)
+- 🔄 Correção dos bugs de logging
+- 📊 Dashboard aprimorado com gráficos
+- 📱 Interface responsiva melhorada
+- 🌙 Modo escuro
+- 📧 Sistema de notificações
 
-## 📝 Changelog
-
-### v2.0.0 (2025-01-XX)
-
-#### Adicionado
-- ✅ Bcrypt para hash de senhas
-- ✅ Proteção CSRF em todas as rotas POST
-- ✅ Rate Limiting para prevenir brute force
-- ✅ Validação de dados com Marshmallow
-- ✅ Logging completo com rotação
-- ✅ Sistema de backup com verificação de integridade
-- ✅ Testes automatizados com Pytest
-- ✅ Detecção automática de porta
-- ✅ Controle de acesso baseado em roles
-- ✅ Health check endpoint
-- ✅ Documentação de segurança completa
-
-#### Melhorado
-- 🔧 Context manager para conexões de banco de dados
-- 🔧 Tratamento de erros robusto
-- 🔧 Configurações via variáveis de ambiente
-- 🔧 Geração automática de chaves secretas
-- 🔧 Sessões seguras com timeout configurável
-
-#### Corrigido
-- 🐛 Vulnerabilidade de injeção SQL
-- 🐛 XSS em campos de texto
-- 🐛 CSRF em formulários
-- 🐛 Senhas fracas permitidas
-- 🐛 Conexões de banco não fechadas
-
-### v1.0.0 (2024-XX-XX)
-
-- 🎉 Versão inicial
+### 🚀 Versão 3.0 (Futuro)
+- 🔐 Autenticação de 2 fatores (2FA)
+- 📲 API REST completa
+- 🔄 Sincronização entre unidades
+- 📊 Business Intelligence integrado
+- 🏥 Integração com equipamentos hospitalares
 
 ---
 
-## 👥 Contribuindo
+## 🤝 Contribuindo
 
-Este é um projeto proprietário para uso militar. Modificações devem ser:
+Contribuições são bem-vindas! Veja como você pode ajudar:
 
-1. Testadas completamente
-2. Documentadas em português
-3. Aprovadas pelo responsável de TI
+### Reportar Bugs
 
-### Padrões de Código
+Abra uma [issue](https://github.com/fernandes01032000/hgu-digital-core/issues) descrevendo:
+- O que aconteceu
+- O que você esperava
+- Passos para reproduzir
+- Versão do Python e SO
 
-- Python: PEP 8
-- Docstrings em português
-- Comentários explicativos
-- Testes para novas funcionalidades
+### Sugerir Funcionalidades
+
+Abra uma [issue](https://github.com/fernandes01032000/hgu-digital-core/issues) com:
+- Descrição da funcionalidade
+- Por que é útil
+- Exemplos de uso
+
+### Enviar Pull Requests
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
+4. Push para a branch (`git push origin feature/MinhaFeature`)
+5. Abra um Pull Request
 
 ---
 
-## 📄 Licença
+## 📜 Licença
 
-Copyright © 2024-2025 - Uso Militar Restrito
-
-Este software é propriedade exclusiva e destinado ao uso interno de hospitais militares.
-Distribuição, modificação ou uso não autorizado é estritamente proibido.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ---
 
-## 📞 Suporte
+## 👥 Autores
 
-Para questões técnicas ou reportar problemas:
-
-- **TI Local**: Entre em contato com o responsável de TI do seu hospital
-- **Segurança**: Consulte [SECURITY.md](SECURITY.md) para questões de segurança
+- **Desenvolvedor Principal**: [Fernandes Piana Rodrigues](https://github.com/fernandes01032000)
+- **Contribuições**: Claude AI Assistant
+- **Organização**: Forças Armadas Brasileiras
 
 ---
 
 ## 🙏 Agradecimentos
 
-Desenvolvido com dedicação para servir aos hospitais militares do Brasil.
-
-**Versão do Sistema**: 2.0.0
-**Última Atualização**: Janeiro de 2025
+- Equipe médica dos HGUs que forneceu feedback valioso
+- Comunidade Python pela excelente documentação
+- Flask, SQLite e todas as bibliotecas open-source utilizadas
 
 ---
 
-**🏛️ HGU Digital Core - Servindo com Tecnologia** 🇧🇷
+## 📞 Suporte
+
+- 📧 **Email**: [Criar issue no GitHub](https://github.com/fernandes01032000/hgu-digital-core/issues)
+- 📚 **Documentação**: [Wiki do Projeto](https://github.com/fernandes01032000/hgu-digital-core/wiki)
+- 💬 **Discussões**: [GitHub Discussions](https://github.com/fernandes01032000/hgu-digital-core/discussions)
+
+---
+
+<div align="center">
+
+### ⭐ Se este projeto foi útil, dê uma estrela no GitHub!
+
+**Desenvolvido com ❤️ para os Hospitais de Guarnição das Forças Armadas Brasileiras**
+
+[⬆ Voltar ao topo](#-hgu-digital-core)
+
+</div>
