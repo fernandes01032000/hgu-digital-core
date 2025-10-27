@@ -1,0 +1,77 @@
+<nav class="navbar navbar-expand-lg navbar-hgu sticky-top">
+    <div class="container-fluid">
+        <!-- Brand -->
+        <a class="navbar-brand" href="/dashboard">
+            <i class="bi bi-hospital me-2"></i>
+            HGU Digital Core
+        </a>
+
+        <!-- Mobile Toggle -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Nav Items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/dashboard' %}active{% endif %}" href="/dashboard">
+                        <i class="bi bi-speedometer2"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/documentos' %}active{% endif %}" href="/documentos">
+                        <i class="bi bi-file-earmark-text"></i> Documentos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/pacientes' %}active{% endif %}" href="/pacientes">
+                        <i class="bi bi-people"></i> Pacientes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/profissionais' %}active{% endif %}" href="/profissionais">
+                        <i class="bi bi-person-badge"></i> Profissionais
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/pdf-builder' %}active{% endif %}" href="/pdf-builder">
+                        <i class="bi bi-file-pdf"></i> PDF Builder
+                    </a>
+                </li>
+                {% if nivel_acesso in ['auditor', 'administrador'] %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/auditoria' %}active{% endif %}" href="/auditoria">
+                        <i class="bi bi-clipboard-check"></i> Auditoria
+                    </a>
+                </li>
+                {% endif %}
+                <li class="nav-item">
+                    <a class="nav-link {% if request.path == '/relatorios' %}active{% endif %}" href="/relatorios">
+                        <i class="bi bi-graph-up"></i> Relatórios
+                    </a>
+                </li>
+            </ul>
+
+            <!-- User Menu -->
+            <ul class="navbar-nav">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        {{ usuario }}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                        <li><h6 class="dropdown-header">Nível: {{ nivel_acesso|title }}</h6></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item" href="/logout">
+                                <i class="bi bi-box-arrow-right me-2"></i>
+                                Sair do Sistema
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - HGU Digital Core{% endblock %}
+
+{% block header %}
+{% include "_navbar.html" %}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <!-- Page Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="text-hgu-primary">
+                <i class="bi bi-speedometer2"></i>
+                Dashboard
+            </h2>
+            <p class="text-muted">Visão geral do sistema</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <!-- Total Documentos -->
+        <div class="col-md-4">
+            <div class="card card-hgu card-stats h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="card-stats-number">{{ estatisticas.total_documentos }}</div>
+                            <div class="card-stats-label">
+                                <i class="bi bi-file-earmark-text"></i>
+                                Documentos Emitidos
+                            </div>
+                        </div>
+                        <div class="text-hgu-primary" style="font-size: 3rem; opacity: 0.2;">
+                            <i class="bi bi-file-earmark-text-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Pacientes -->
+        <div class="col-md-4">
+            <div class="card card-hgu card-stats h-100" style="border-left-color: #17a2b8;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="card-stats-number" style="color: #17a2b8;">{{ estatisticas.total_pacientes }}</div>
+                            <div class="card-stats-label">
+                                <i class="bi bi-people"></i>
+                                Pacientes Cadastrados
+                            </div>
+                        </div>
+                        <div style="font-size: 3rem; opacity: 0.2; color: #17a2b8;">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Profissionais -->
+        <div class="col-md-4">
+            <div class="card card-hgu card-stats h-100" style="border-left-color: #28a745;">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="flex-grow-1">
+                            <div class="card-stats-number" style="color: #28a745;">{{ estatisticas.total_profissionais }}</div>
+                            <div class="card-stats-label">
+                                <i class="bi bi-person-badge"></i>
+                                Profissionais Ativos
+                            </div>
+                        </div>
+                        <div style="font-size: 3rem; opacity: 0.2; color: #28a745;">
+                            <i class="bi bi-person-badge-fill"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Documentos por Status -->
+        <div class="col-lg-6">
+            <div class="card card-hgu h-100">
+                <div class="card-header-hgu">
+                    <i class="bi bi-graph-up"></i>
+                    Documentos por Status
+                </div>
+                <div class="card-body">
+                    {% if estatisticas.documentos_por_status %}
+                    <div class="table-responsive">
+                        <table class="table table-hgu table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Status</th>
+                                    <th class="text-end">Quantidade</th>
+                                    <th class="text-end">%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in estatisticas.documentos_por_status %}
+                                <tr>
+                                    <td>
+                                        <span class="badge badge-hgu-primary">{{ item.status }}</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <strong>{{ item.total }}</strong>
+                                    </td>
+                                    <td class="text-end">
+                                        {% if estatisticas.total_documentos > 0 %}
+                                        {{ (item.total / estatisticas.total_documentos * 100)|round(1) }}%
+                                        {% else %}
+                                        0%
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox" style="font-size: 3rem; color: var(--hgu-cinza-claro);"></i>
+                        <p class="text-muted mt-3">Nenhum documento emitido ainda</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Acesso Rápido -->
+        <div class="col-lg-6">
+            <div class="card card-hgu h-100">
+                <div class="card-header-hgu">
+                    <i class="bi bi-lightning-charge"></i>
+                    Acesso Rápido
+                </div>
+                <div class="card-body">
+                    <div class="quick-actions-grid">
+                        <a href="/documentos" class="card card-hgu quick-action-card text-decoration-none">
+                            <div class="quick-action-icon text-hgu-primary">
+                                <i class="bi bi-file-earmark-plus"></i>
+                            </div>
+                            <strong class="text-dark">Novo Documento</strong>
+                        </a>
+
+                        <a href="/pacientes" class="card card-hgu quick-action-card text-decoration-none">
+                            <div class="quick-action-icon" style="color: #17a2b8;">
+                                <i class="bi bi-person-plus"></i>
+                            </div>
+                            <strong class="text-dark">Cadastrar Paciente</strong>
+                        </a>
+
+                        <a href="/profissionais" class="card card-hgu quick-action-card text-decoration-none">
+                            <div class="quick-action-icon" style="color: #28a745;">
+                                <i class="bi bi-person-badge"></i>
+                            </div>
+                            <strong class="text-dark">Cadastrar Profissional</strong>
+                        </a>
+
+                        <a href="/pdf-builder" class="card card-hgu quick-action-card text-decoration-none">
+                            <div class="quick-action-icon" style="color: #ffc107;">
+                                <i class="bi bi-file-pdf"></i>
+                            </div>
+                            <strong class="text-dark">PDF Builder</strong>
+                        </a>
+
+                        <a href="/relatorios" class="card card-hgu quick-action-card text-decoration-none">
+                            <div class="quick-action-icon" style="color: #6610f2;">
+                                <i class="bi bi-graph-up-arrow"></i>
+                            </div>
+                            <strong class="text-dark">Gerar Relatório</strong>
+                        </a>
+
+                        {% if nivel_acesso in ['auditor', 'administrador'] %}
+                        <a href="/auditoria" class="card card-hgu quick-action-card text-decoration-none">
+                            <div class="quick-action-icon" style="color: #dc3545;">
+                                <i class="bi bi-clipboard-check"></i>
+                            </div>
+                            <strong class="text-dark">Auditoria</strong>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Info -->
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-hgu-info d-flex align-items-center">
+                <i class="bi bi-info-circle me-3" style="font-size: 1.5rem;"></i>
+                <div>
+                    <strong>Sistema Offline</strong><br>
+                    <small>Todos os dados são armazenados localmente. Nenhuma conexão com a internet é necessária.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

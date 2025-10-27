@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacientes - HGU Digital Core</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-container">
+            <h1>🏛️ HGU Digital Core</h1>
+            <div class="cabecalho-usuario">
+                <span>Bem-vindo, <strong>{{ usuario }}</strong></span>
+                <a href="/logout" class="btn-logout">Sair</a>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="navegacao">
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/documentos">Documentos</a></li>
+            <li><a href="/pacientes" class="ativo">Pacientes</a></li>
+            <li><a href="/profissionais">Profissionais</a></li>
+            <li><a href="/auditoria">Auditoria</a></li>
+            <li><a href="/relatorios">Relatórios</a></li>
+        </ul>
+    </nav>
+    
+    <main class="container">
+        <div class="card">
+            <h2 class="card-titulo">👥 Cadastro de Pacientes</h2>
+            
+            <div id="mensagem-paciente"></div>
+            
+            <form id="form-paciente">
+                <div class="form-grupo">
+                    <label for="nome_completo">Nome Completo *</label>
+                    <input type="text" id="nome_completo" required>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="prec_cp">PREC-CP *</label>
+                    <input type="text" id="prec_cp" required>
+                    <small>Formato: 000-00</small>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="posto">Posto/Graduação</label>
+                    <input type="text" id="posto">
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="om">Organização Militar (OM)</label>
+                    <input type="text" id="om">
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="data_nascimento">Data de Nascimento</label>
+                    <input type="date" id="data_nascimento">
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="observacoes">Observações</label>
+                    <textarea id="observacoes"></textarea>
+                </div>
+                
+                <button type="submit" class="btn btn-primario">Cadastrar Paciente</button>
+            </form>
+        </div>
+    </main>
+    
+    <script src="/static/js/app.js"></script>
+    <script>
+        document.getElementById('form-paciente').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const mensagemDiv = document.getElementById('mensagem-paciente');
+            
+            const dados = {
+                nome_completo: document.getElementById('nome_completo').value,
+                prec_cp: document.getElementById('prec_cp').value,
+                posto: document.getElementById('posto').value,
+                om: document.getElementById('om').value,
+                data_nascimento: document.getElementById('data_nascimento').value,
+                observacoes: document.getElementById('observacoes').value
+            };
+            
+            try {
+                const resposta = await fazerRequisicaoAPI('/api/pacientes/cadastrar', dados);
+                
+                if (resposta.sucesso) {
+                    mensagemDiv.innerHTML = '<div class="alerta alerta-sucesso">Paciente cadastrado com sucesso!</div>';
+                    document.getElementById('form-paciente').reset();
+                } else {
+                    mensagemDiv.innerHTML = `<div class="alerta alerta-erro">${resposta.mensagem}</div>`;
+                }
+            } catch (erro) {
+                mensagemDiv.innerHTML = '<div class="alerta alerta-erro">Erro ao cadastrar paciente</div>';
+            }
+        });
+    </script>
+</body>
+</html>
+

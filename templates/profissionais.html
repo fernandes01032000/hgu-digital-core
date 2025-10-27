@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profissionais - HGU Digital Core</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-container">
+            <h1>🏛️ HGU Digital Core</h1>
+            <div class="cabecalho-usuario">
+                <span>Bem-vindo, <strong>{{ usuario }}</strong></span>
+                <a href="/logout" class="btn-logout">Sair</a>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="navegacao">
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/documentos">Documentos</a></li>
+            <li><a href="/pacientes">Pacientes</a></li>
+            <li><a href="/profissionais" class="ativo">Profissionais</a></li>
+            <li><a href="/auditoria">Auditoria</a></li>
+            <li><a href="/relatorios">Relatórios</a></li>
+        </ul>
+    </nav>
+    
+    <main class="container">
+        <div class="card">
+            <h2 class="card-titulo">👨‍⚕️ Cadastro de Profissionais</h2>
+            
+            <div id="mensagem-profissional"></div>
+            
+            <form id="form-profissional">
+                <div class="form-grupo">
+                    <label for="nome">Nome Completo *</label>
+                    <input type="text" id="nome" required>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="funcao">Função *</label>
+                    <select id="funcao" required>
+                        <option value="">Selecione...</option>
+                        <option value="Médico">Médico</option>
+                        <option value="Enfermeiro">Enfermeiro</option>
+                        <option value="Técnico de Enfermagem">Técnico de Enfermagem</option>
+                        <option value="Fisioterapeuta">Fisioterapeuta</option>
+                        <option value="Farmacêutico">Farmacêutico</option>
+                        <option value="Dentista">Dentista</option>
+                        <option value="Administrativo">Administrativo</option>
+                        <option value="Outro">Outro</option>
+                    </select>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="crm_coren">CRM/COREN</label>
+                    <input type="text" id="crm_coren">
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="posto_graduacao">Posto/Graduação</label>
+                    <input type="text" id="posto_graduacao">
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="setor_id">Setor</label>
+                    <select id="setor_id">
+                        <option value="">Selecione...</option>
+                        {% for setor in setores %}
+                        <option value="{{ setor.id }}">{{ setor.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn btn-primario">Cadastrar Profissional</button>
+            </form>
+        </div>
+    </main>
+    
+    <script src="/static/js/app.js"></script>
+    <script>
+        document.getElementById('form-profissional').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const mensagemDiv = document.getElementById('mensagem-profissional');
+            
+            const dados = {
+                nome: document.getElementById('nome').value,
+                funcao: document.getElementById('funcao').value,
+                crm_coren: document.getElementById('crm_coren').value,
+                posto_graduacao: document.getElementById('posto_graduacao').value,
+                setor_id: document.getElementById('setor_id').value || null
+            };
+            
+            try {
+                const resposta = await fazerRequisicaoAPI('/api/profissionais/cadastrar', dados);
+                
+                if (resposta.sucesso) {
+                    mensagemDiv.innerHTML = '<div class="alerta alerta-sucesso">Profissional cadastrado com sucesso!</div>';
+                    document.getElementById('form-profissional').reset();
+                } else {
+                    mensagemDiv.innerHTML = `<div class="alerta alerta-erro">${resposta.mensagem}</div>`;
+                }
+            } catch (erro) {
+                mensagemDiv.innerHTML = '<div class="alerta alerta-erro">Erro ao cadastrar profissional</div>';
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoria - HGU Digital Core</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-container">
+            <h1>🏛️ HGU Digital Core</h1>
+            <div class="cabecalho-usuario">
+                <span>Bem-vindo, <strong>{{ usuario }}</strong></span>
+                <a href="/logout" class="btn-logout">Sair</a>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="navegacao">
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/documentos">Documentos</a></li>
+            <li><a href="/pacientes">Pacientes</a></li>
+            <li><a href="/profissionais">Profissionais</a></li>
+            <li><a href="/auditoria" class="ativo">Auditoria</a></li>
+            <li><a href="/relatorios">Relatórios</a></li>
+        </ul>
+    </nav>
+    
+    <main class="container">
+        <div class="card">
+            <h2 class="card-titulo">🔍 Painel de Auditoria FUSEx</h2>
+            
+            <p>Painel exclusivo para auditores. Aqui você pode visualizar todos os documentos emitidos e alterar seus status.</p>
+            
+            <div class="alerta alerta-info">
+                <strong>Status disponíveis:</strong>
+                {% for status in status_disponiveis %}
+                <span style="margin-right: 1rem;">{{ status }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3 style="color: #556B2F; margin-bottom: 1rem;">Documentos para Auditoria</h3>
+            
+            <p style="text-align: center; color: #666; padding: 2rem;">
+                Funcionalidade de auditoria em desenvolvimento.<br>
+                Em breve você poderá auditar documentos, registrar glosas e gerar relatórios.
+            </p>
+        </div>
+    </main>
+    
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
+

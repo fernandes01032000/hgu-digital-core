@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - HGU Digital Core</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-container">
+            <h1>🏛️ HGU Digital Core</h1>
+            <div class="cabecalho-usuario">
+                <span>Bem-vindo, <strong>{{ usuario }}</strong></span>
+                <a href="/logout" class="btn-logout">Sair</a>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="navegacao">
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/documentos">Documentos</a></li>
+            <li><a href="/pacientes">Pacientes</a></li>
+            <li><a href="/profissionais">Profissionais</a></li>
+            <li><a href="/auditoria">Auditoria</a></li>
+            <li><a href="/relatorios" class="ativo">Relatórios</a></li>
+        </ul>
+    </nav>
+    
+    <main class="container">
+        <div class="card">
+            <h2 class="card-titulo">📊 Relatórios Administrativos</h2>
+            
+            <p>Gere relatórios detalhados sobre as atividades do sistema.</p>
+        </div>
+        
+        <div class="grid-estatisticas">
+            <div class="card-estatistica" style="cursor: pointer;" onclick="alert('Relatório em desenvolvimento')">
+                <div style="font-size: 3rem; margin-bottom: 0.5rem;">📄</div>
+                <div class="card-estatistica-titulo">Documentos por Tipo</div>
+            </div>
+            
+            <div class="card-estatistica" style="cursor: pointer;" onclick="alert('Relatório em desenvolvimento')">
+                <div style="font-size: 3rem; margin-bottom: 0.5rem;">🏥</div>
+                <div class="card-estatistica-titulo">Documentos por Setor</div>
+            </div>
+            
+            <div class="card-estatistica" style="cursor: pointer;" onclick="alert('Relatório em desenvolvimento')">
+                <div style="font-size: 3rem; margin-bottom: 0.5rem;">📈</div>
+                <div class="card-estatistica-titulo">Estatísticas Mensais</div>
+            </div>
+            
+            <div class="card-estatistica" style="cursor: pointer;" onclick="alert('Relatório em desenvolvimento')">
+                <div style="font-size: 3rem; margin-bottom: 0.5rem;">🔍</div>
+                <div class="card-estatistica-titulo">Auditoria FUSEx</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h3 style="color: #556B2F; margin-bottom: 1rem;">Exportar Dados</h3>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <button class="btn btn-secundario" onclick="alert('Exportação em desenvolvimento')">
+                    📥 Exportar para CSV
+                </button>
+                <button class="btn btn-secundario" onclick="alert('Exportação em desenvolvimento')">
+                    📥 Exportar para PDF
+                </button>
+                <button class="btn btn-secundario" onclick="alert('Exportação em desenvolvimento')">
+                    📥 Exportar para Excel
+                </button>
+            </div>
+        </div>
+    </main>
+    
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
+

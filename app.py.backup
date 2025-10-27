@@ -1,0 +1,485 @@
+# -*- coding: utf-8 -*-
+"""
+Aplicação Principal - HGU Digital Core
+Servidor Flask que gerencia todas as rotas e funcionalidades do sistema
+"""
+
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
+import os
+import hashlib
+import json
+from datetime import datetime
+from functools import wraps
+
+# Importar módulos do sistema
+from config import SERVER, SECURITY, SYSTEM_CONFIG, TIPOS_DOCUMENTOS, STATUS_AUDITORIA, NIVEIS_ACESSO
+from database import (
+    inicializar_db, verificar_setup_inicial, salvar_configuracao,
+    obter_configuracao, criar_setores_padrao, criar_usuario_admin,
+    registrar_log, listar_setores, cadastrar_paciente, cadastrar_profissional,
+    criar_documento, listar_documentos, buscar_paciente_por_prec, listar_profissionais
+)
+from pdf_generator import gerar_pdf_documento
+
+# Criar aplicação Flask
+app = Flask(__name__)
+app.secret_key = SECURITY['secret_key']
+
+# Inicializar banco de dados na primeira execução
+if not os.path.exists('hgu_core.db'):
+    print("🔧 Primeira execução detectada. Inicializando banco de dados...")
+    inicializar_db()
+
+
+# ============================================================================
+# DECORADORES E FUNÇÕES AUXILIARES
+# ============================================================================
+
+def login_requerido(f):
+    """
+    Decorador que verifica se o usuário está logado
+    Redireciona para login se não estiver
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'usuario_id' not in session:
+            return redirect(url_for('login'))
+        return f(*args, **kwargs)
+    return decorated_function
+
+
+def obter_ip_cliente():
+    """
+    Obtém o endereço IP do cliente que fez a requisição
+    """
+    if request.headers.get('X-Forwarded-For'):
+        return request.headers.get('X-Forwarded-For').split(',')[0]
+    return request.remote_addr
+
+
+# ============================================================================
+# ROTAS - AUTENTICAÇÃO
+# ============================================================================
+
+@app.route('/')
+def index():
+    """
+    Página inicial do sistema
+    Redireciona para setup se não configurado, ou para login
+    """
+    if not verificar_setup_inicial():
+        return redirect(url_for('setup'))
+    
+    if 'usuario_id' in session:
+        return redirect(url_for('dashboard'))
+    
+    return redirect(url_for('login'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    """
+    Página de login do sistema
+    """
+    if request.method == 'POST':
+        dados = request.get_json()
+        login_usuario = dados.get('login')
+        senha = dados.get('senha')
+        
+        # Hash da senha para comparação
+        senha_hash = hashlib.sha256((senha + SECURITY['salt']).encode()).hexdigest()
+        
+        # Verificar credenciais (implementação simplificada)
+        from database import conectar_db
+        conn = conectar_db()
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT * FROM usuarios 
+            WHERE login = ? AND senha_hash = ? AND ativo = 1
+        """, (login_usuario, senha_hash))
+        
+        usuario = cursor.fetchone()
+        conn.close()
+        
+        if usuario:
+            # Criar sessão
+            session['usuario_id'] = usuario['id']
+            session['usuario_nome'] = usuario['nome']
+            session['nivel_acesso'] = usuario['nivel_acesso']
+            
+            # Registrar log
+            registrar_log(
+                usuario['id'], usuario['nome'], obter_ip_cliente(),
+                'Autenticação', 'Login realizado'
+            )
+            
+            return jsonify({'sucesso': True, 'mensagem': 'Login realizado com sucesso!'})
+        else:
+            return jsonify({'sucesso': False, 'mensagem': 'Login ou senha incorretos'}), 401
+    
+    return render_template('login.html')
+
+
+@app.route('/logout')
+def logout():
+    """
+    Realiza logout do usuário
+    """
+    if 'usuario_id' in session:
+        registrar_log(
+            session['usuario_id'], session['usuario_nome'], obter_ip_cliente(),
+            'Autenticação', 'Logout realizado'
+        )
+    
+    session.clear()
+    return redirect(url_for('login'))
+
+
+# ============================================================================
+# ROTAS - SETUP INICIAL
+# ============================================================================
+
+@app.route('/setup', methods=['GET', 'POST'])
+def setup():
+    """
+    Configuração inicial do sistema
+    Executado apenas na primeira vez
+    """
+    if verificar_setup_inicial():
+        return redirect(url_for('index'))
+    
+    if request.method == 'POST':
+        dados = request.get_json()
+        
+        # Salvar configurações
+        salvar_configuracao('nome_hospital', dados.get('nome_hospital'))
+        salvar_configuracao('sigla_oms', dados.get('sigla_oms'))
+        salvar_configuracao('regiao_militar', dados.get('regiao_militar'))
+        salvar_configuracao('comando_vinculado', dados.get('comando_vinculado'))
+        salvar_configuracao('diretor_tecnico', dados.get('diretor_tecnico'))
+        salvar_configuracao('responsavel_ti', dados.get('responsavel_ti'))
+        salvar_configuracao('prefixo_documentos', dados.get('prefixo_documentos', 'HGU'))
+        
+        # Criar setores padrão
+        criar_setores_padrao()
+        
+        # Criar usuário administrador
+        criar_usuario_admin(
+            dados.get('admin_login'),
+            dados.get('admin_senha'),
+            dados.get('admin_nome')
+        )
+        
+        # Marcar sistema como configurado
+        salvar_configuracao('configurado', '1')
+        
+        return jsonify({'sucesso': True, 'mensagem': 'Sistema configurado com sucesso!'})
+    
+    return render_template('setup.html')
+
+
+# ============================================================================
+# ROTAS - DASHBOARD
+# ============================================================================
+
+@app.route('/dashboard')
+@login_requerido
+def dashboard():
+    """
+    Painel principal do sistema
+    """
+    # Obter estatísticas básicas
+    from database import conectar_db
+    conn = conectar_db()
+    cursor = conn.cursor()
+    
+    # Total de documentos
+    cursor.execute("SELECT COUNT(*) as total FROM documentos")
+    total_docs = cursor.fetchone()['total']
+    
+    # Total de pacientes
+    cursor.execute("SELECT COUNT(*) as total FROM pacientes WHERE ativo = 1")
+    total_pacientes = cursor.fetchone()['total']
+    
+    # Total de profissionais
+    cursor.execute("SELECT COUNT(*) as total FROM profissionais WHERE ativo = 1")
+    total_profissionais = cursor.fetchone()['total']
+    
+    # Documentos por status
+    cursor.execute("""
+        SELECT status, COUNT(*) as total 
+        FROM documentos 
+        GROUP BY status
+    """)
+    docs_por_status = cursor.fetchall()
+    
+    conn.close()
+    
+    estatisticas = {
+        'total_documentos': total_docs,
+        'total_pacientes': total_pacientes,
+        'total_profissionais': total_profissionais,
+        'documentos_por_status': [dict(row) for row in docs_por_status]
+    }
+    
+    return render_template('dashboard.html', 
+                         usuario=session['usuario_nome'],
+                         nivel_acesso=session['nivel_acesso'],
+                         estatisticas=estatisticas)
+
+
+# ============================================================================
+# ROTAS - DOCUMENTOS
+# ============================================================================
+
+@app.route('/documentos')
+@login_requerido
+def documentos():
+    """
+    Página de gestão de documentos
+    """
+    return render_template('documentos.html',
+                         tipos_documentos=TIPOS_DOCUMENTOS,
+                         usuario=session['usuario_nome'])
+
+
+@app.route('/api/documentos/listar', methods=['GET'])
+@login_requerido
+def api_listar_documentos():
+    """
+    API para listar documentos
+    """
+    limite = request.args.get('limite', 100, type=int)
+    docs = listar_documentos(limite)
+    
+    return jsonify({'sucesso': True, 'documentos': docs})
+
+
+@app.route('/api/documentos/criar', methods=['POST'])
+@login_requerido
+def api_criar_documento():
+    """
+    API para criar novo documento
+    """
+    dados = request.get_json()
+    
+    try:
+        codigo = criar_documento(
+            tipo_documento=dados['tipo_documento'],
+            paciente_id=dados['paciente_id'],
+            profissional_id=dados['profissional_id'],
+            setor_origem_id=dados['setor_origem_id'],
+            setor_destino_id=dados.get('setor_destino_id'),
+            conteudo_json=dados['conteudo'],
+            usuario_criador_id=session['usuario_id']
+        )
+        
+        # Registrar log
+        registrar_log(
+            session['usuario_id'], session['usuario_nome'], obter_ip_cliente(),
+            'Documentos', f'Documento criado: {codigo}'
+        )
+        
+        return jsonify({
+            'sucesso': True, 
+            'mensagem': 'Documento criado com sucesso!',
+            'codigo': codigo
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'sucesso': False,
+            'mensagem': f'Erro ao criar documento: {str(e)}'
+        }), 500
+
+
+# ============================================================================
+# ROTAS - PACIENTES
+# ============================================================================
+
+@app.route('/pacientes')
+@login_requerido
+def pacientes():
+    """
+    Página de gestão de pacientes
+    """
+    return render_template('pacientes.html', usuario=session['usuario_nome'])
+
+
+@app.route('/api/pacientes/cadastrar', methods=['POST'])
+@login_requerido
+def api_cadastrar_paciente():
+    """
+    API para cadastrar novo paciente
+    """
+    dados = request.get_json()
+    
+    try:
+        paciente_id = cadastrar_paciente(
+            nome_completo=dados['nome_completo'],
+            prec_cp=dados['prec_cp'],
+            posto=dados.get('posto', ''),
+            om=dados.get('om', ''),
+            data_nascimento=dados.get('data_nascimento', ''),
+            observacoes=dados.get('observacoes', '')
+        )
+        
+        # Registrar log
+        registrar_log(
+            session['usuario_id'], session['usuario_nome'], obter_ip_cliente(),
+            'Pacientes', f'Paciente cadastrado: {dados["nome_completo"]}'
+        )
+        
+        return jsonify({
+            'sucesso': True,
+            'mensagem': 'Paciente cadastrado com sucesso!',
+            'paciente_id': paciente_id
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'sucesso': False,
+            'mensagem': f'Erro ao cadastrar paciente: {str(e)}'
+        }), 500
+
+
+@app.route('/api/pacientes/buscar/<prec_cp>', methods=['GET'])
+@login_requerido
+def api_buscar_paciente(prec_cp):
+    """
+    API para buscar paciente por PREC-CP
+    """
+    paciente = buscar_paciente_por_prec(prec_cp)
+    
+    if paciente:
+        return jsonify({'sucesso': True, 'paciente': paciente})
+    else:
+        return jsonify({'sucesso': False, 'mensagem': 'Paciente não encontrado'}), 404
+
+
+# ============================================================================
+# ROTAS - PROFISSIONAIS
+# ============================================================================
+
+@app.route('/profissionais')
+@login_requerido
+def profissionais():
+    """
+    Página de gestão de profissionais
+    """
+    setores = listar_setores()
+    return render_template('profissionais.html', 
+                         usuario=session['usuario_nome'],
+                         setores=setores)
+
+
+@app.route('/api/profissionais/cadastrar', methods=['POST'])
+@login_requerido
+def api_cadastrar_profissional():
+    """
+    API para cadastrar novo profissional
+    """
+    dados = request.get_json()
+    
+    try:
+        prof_id = cadastrar_profissional(
+            nome=dados['nome'],
+            funcao=dados['funcao'],
+            crm_coren=dados.get('crm_coren', ''),
+            posto_graduacao=dados.get('posto_graduacao', ''),
+            setor_id=dados.get('setor_id')
+        )
+        
+        # Registrar log
+        registrar_log(
+            session['usuario_id'], session['usuario_nome'], obter_ip_cliente(),
+            'Profissionais', f'Profissional cadastrado: {dados["nome"]}'
+        )
+        
+        return jsonify({
+            'sucesso': True,
+            'mensagem': 'Profissional cadastrado com sucesso!',
+            'profissional_id': prof_id
+        })
+    
+    except Exception as e:
+        return jsonify({
+            'sucesso': False,
+            'mensagem': f'Erro ao cadastrar profissional: {str(e)}'
+        }), 500
+
+
+@app.route('/api/profissionais/listar', methods=['GET'])
+@login_requerido
+def api_listar_profissionais():
+    """
+    API para listar profissionais
+    """
+    profs = listar_profissionais()
+    return jsonify({'sucesso': True, 'profissionais': profs})
+
+
+# ============================================================================
+# ROTAS - SETORES
+# ============================================================================
+
+@app.route('/api/setores/listar', methods=['GET'])
+@login_requerido
+def api_listar_setores():
+    """
+    API para listar setores
+    """
+    setores = listar_setores()
+    return jsonify({'sucesso': True, 'setores': setores})
+
+
+# ============================================================================
+# ROTAS - RELATÓRIOS
+# ============================================================================
+
+@app.route('/relatorios')
+@login_requerido
+def relatorios():
+    """
+    Página de relatórios do sistema
+    """
+    return render_template('relatorios.html', usuario=session['usuario_nome'])
+
+
+# ============================================================================
+# ROTAS - AUDITORIA
+# ============================================================================
+
+@app.route('/auditoria')
+@login_requerido
+def auditoria():
+    """
+    Página de auditoria (apenas para auditores e administradores)
+    """
+    if session['nivel_acesso'] not in ['auditor', 'administrador']:
+        return "Acesso negado", 403
+    
+    return render_template('auditoria.html', 
+                         usuario=session['usuario_nome'],
+                         status_disponiveis=STATUS_AUDITORIA)
+
+
+# ============================================================================
+# INICIAR SERVIDOR
+# ============================================================================
+
+if __name__ == '__main__':
+    print("=" * 60)
+    print("🏛️  HGU DIGITAL CORE - Sistema Offline v1.0")
+    print("=" * 60)
+    print(f"🌐 Servidor iniciando em http://{SERVER['host']}:{SERVER['port']}")
+    print(f"📡 Acesse de outros computadores usando: http://[IP-DESTE-PC]:{SERVER['port']}")
+    print("=" * 60)
+    
+    app.run(
+        host=SERVER['host'],
+        port=SERVER['port'],
+        debug=SERVER['debug']
+    )
+

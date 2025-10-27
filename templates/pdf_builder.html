@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Form Builder - HGU Digital Core</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f5f5;
+        }
+
+        .pdf-builder-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .pdf-builder-header {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+
+        .pdf-builder-header h1 {
+            margin: 0 0 10px 0;
+            color: #556B2F;
+            font-size: 28px;
+        }
+
+        .pdf-builder-header p {
+            margin: 0;
+            color: #666;
+        }
+
+        .coming-soon {
+            background: white;
+            padding: 60px 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .coming-soon-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .coming-soon h2 {
+            color: #556B2F;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .coming-soon p {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .feature-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #556B2F;
+        }
+
+        .feature-card h3 {
+            color: #556B2F;
+            margin: 0 0 10px 0;
+            font-size: 18px;
+        }
+
+        .feature-card p {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: #556B2F;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+
+        .back-button:hover {
+            background: #3d4f21;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #FFA500;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="pdf-builder-container">
+        <div class="pdf-builder-header">
+            <h1>
+                📄 PDF Form Builder
+                <span class="status-badge">Em Desenvolvimento</span>
+            </h1>
+            <p>Crie formulários PDF interativos com mapeamento visual de campos</p>
+        </div>
+
+        <div class="coming-soon">
+            <div class="coming-soon-icon">🚧</div>
+            <h2>Interface React em Desenvolvimento</h2>
+            <p>O backend está completo! A interface visual React está sendo implementada na Etapa 2.</p>
+
+            <div class="features-list">
+                <div class="feature-card">
+                    <h3>✅ Upload de PDFs</h3>
+                    <p>Backend completo para upload e validação de arquivos PDF de até 10MB com detecção automática de dimensões.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>✅ Gerenciamento de Templates</h3>
+                    <p>CRUD completo: criar, listar, atualizar, deletar e duplicar templates com armazenamento persistente.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>✅ 8 Tipos de Campos</h3>
+                    <p>Suporte para text, textarea, checkbox, radio, dropdown, date, signature e image fields.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>✅ Mapeamento Visual</h3>
+                    <p>Sistema de coordenadas (X, Y) para posicionamento preciso de campos no PDF.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>✅ Geração de PDF Preenchido</h3>
+                    <p>Renderização completa com PyPDF2 + ReportLab, suporte a imagens base64 e assinaturas digitais.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>✅ Validação Completa</h3>
+                    <p>Schemas Marshmallow para todos os endpoints, validação de tamanho, tipo e dimensões de campos.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>✅ Segurança Integrada</h3>
+                    <p>Autenticação obrigatória, logs de auditoria, rate limiting e validação de sessão Flask.</p>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔄 Interface React (Em breve)</h3>
+                    <p>Drag-and-drop visual, preview em tempo real, edição de propriedades e biblioteca de templates.</p>
+                </div>
+            </div>
+
+            <div style="margin-top: 40px;">
+                <h3 style="color: #556B2F; margin-bottom: 15px;">API Endpoints Disponíveis:</h3>
+                <div style="background: #f0f0f0; padding: 20px; border-radius: 8px; text-align: left; max-width: 600px; margin: 0 auto; font-family: monospace; font-size: 13px;">
+                    <p style="margin: 5px 0;"><strong>GET</strong> /api/pdf-templates</p>
+                    <p style="margin: 5px 0;"><strong>POST</strong> /api/pdf-templates/upload</p>
+                    <p style="margin: 5px 0;"><strong>GET</strong> /api/pdf-templates/:id</p>
+                    <p style="margin: 5px 0;"><strong>GET</strong> /api/pdf-templates/:id/pdf</p>
+                    <p style="margin: 5px 0;"><strong>PUT</strong> /api/pdf-templates/:id</p>
+                    <p style="margin: 5px 0;"><strong>DELETE</strong> /api/pdf-templates/:id</p>
+                    <p style="margin: 5px 0;"><strong>POST</strong> /api/pdf-templates/:id/duplicate</p>
+                    <p style="margin: 5px 0;"><strong>PUT</strong> /api/pdf-templates/:id/fields</p>
+                    <p style="margin: 5px 0;"><strong>GET</strong> /api/pdf-templates/:id/fields</p>
+                    <p style="margin: 5px 0;"><strong>POST</strong> /api/pdf-templates/:id/generate</p>
+                    <p style="margin: 5px 0;"><strong>POST</strong> /api/upload-image</p>
+                </div>
+            </div>
+
+            <a href="/dashboard" class="back-button">← Voltar ao Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

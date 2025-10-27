@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuração Inicial - HGU Digital Core</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card" style="max-width: 600px;">
+            <h1 class="login-titulo">⚙️ Configuração Inicial</h1>
+            <p class="login-subtitulo">Configure o sistema pela primeira vez</p>
+            
+            <div id="mensagem-alerta"></div>
+            
+            <form id="form-setup">
+                <h3 style="color: #556B2F; margin-top: 1.5rem;">Dados do Hospital</h3>
+                
+                <div class="form-grupo">
+                    <label for="nome_hospital">Nome Completo do Hospital *</label>
+                    <input type="text" id="nome_hospital" name="nome_hospital" required>
+                    <small>Exemplo: Hospital Geral de Manaus</small>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="sigla_oms">Sigla OMS *</label>
+                    <input type="text" id="sigla_oms" name="sigla_oms" required>
+                    <small>Exemplo: HGUMBA</small>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="regiao_militar">Região Militar *</label>
+                    <input type="text" id="regiao_militar" name="regiao_militar" required>
+                    <small>Exemplo: 8ª Região Militar</small>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="comando_vinculado">Comando Vinculado *</label>
+                    <input type="text" id="comando_vinculado" name="comando_vinculado" required>
+                    <small>Exemplo: Comando Militar da Amazônia</small>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="diretor_tecnico">Diretor Técnico *</label>
+                    <input type="text" id="diretor_tecnico" name="diretor_tecnico" required>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="responsavel_ti">Responsável pela TI *</label>
+                    <input type="text" id="responsavel_ti" name="responsavel_ti" required>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="prefixo_documentos">Prefixo dos Documentos *</label>
+                    <input type="text" id="prefixo_documentos" name="prefixo_documentos" value="HGU" required>
+                    <small>Usado na numeração dos documentos (ex: HGU-EXAM-2025-0001)</small>
+                </div>
+                
+                <h3 style="color: #556B2F; margin-top: 1.5rem;">Usuário Administrador</h3>
+                
+                <div class="form-grupo">
+                    <label for="admin_nome">Nome Completo *</label>
+                    <input type="text" id="admin_nome" name="admin_nome" required>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="admin_login">Login *</label>
+                    <input type="text" id="admin_login" name="admin_login" required>
+                    <small>Nome de usuário para acesso ao sistema</small>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="admin_senha">Senha *</label>
+                    <input type="password" id="admin_senha" name="admin_senha" required minlength="6">
+                    <small>Mínimo de 6 caracteres</small>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="admin_senha_confirma">Confirmar Senha *</label>
+                    <input type="password" id="admin_senha_confirma" name="admin_senha_confirma" required minlength="6">
+                </div>
+                
+                <button type="submit" class="btn btn-primario btn-bloco" style="margin-top: 2rem;">
+                    Concluir Configuração
+                </button>
+            </form>
+            
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p>Configurando sistema...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('form-setup').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const mensagemDiv = document.getElementById('mensagem-alerta');
+            const loadingDiv = document.getElementById('loading');
+            
+            // Validar senhas
+            const senha = document.getElementById('admin_senha').value;
+            const senhaConfirma = document.getElementById('admin_senha_confirma').value;
+            
+            if (senha !== senhaConfirma) {
+                mensagemDiv.innerHTML = '<div class="alerta alerta-erro">As senhas não coincidem!</div>';
+                return;
+            }
+            
+            // Coletar dados do formulário
+            const dados = {
+                nome_hospital: document.getElementById('nome_hospital').value,
+                sigla_oms: document.getElementById('sigla_oms').value,
+                regiao_militar: document.getElementById('regiao_militar').value,
+                comando_vinculado: document.getElementById('comando_vinculado').value,
+                diretor_tecnico: document.getElementById('diretor_tecnico').value,
+                responsavel_ti: document.getElementById('responsavel_ti').value,
+                prefixo_documentos: document.getElementById('prefixo_documentos').value,
+                admin_nome: document.getElementById('admin_nome').value,
+                admin_login: document.getElementById('admin_login').value,
+                admin_senha: senha
+            };
+            
+            // Mostrar loading
+            loadingDiv.classList.add('ativo');
+            mensagemDiv.innerHTML = '';
+            
+            try {
+                const resposta = await fetch('/setup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(dados)
+                });
+                
+                const resultado = await resposta.json();
+                
+                loadingDiv.classList.remove('ativo');
+                
+                if (resultado.sucesso) {
+                    mensagemDiv.innerHTML = '<div class="alerta alerta-sucesso">Sistema configurado com sucesso! Redirecionando para login...</div>';
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 2000);
+                } else {
+                    mensagemDiv.innerHTML = `<div class="alerta alerta-erro">${resultado.mensagem}</div>`;
+                }
+            } catch (erro) {
+                loadingDiv.classList.remove('ativo');
+                mensagemDiv.innerHTML = '<div class="alerta alerta-erro">Erro ao configurar sistema</div>';
+            }
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}Login - HGU Digital Core{% endblock %}
+
+{% block body_class %}login-page{% endblock %}
+
+{% block content %}
+<div class="login-container">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-5 col-lg-4">
+                <div class="login-card card shadow-lg">
+                    <div class="card-body p-5">
+                        <!-- Logo e Título -->
+                        <div class="text-center mb-4">
+                            <h1 class="text-hgu-primary mb-2">
+                                <i class="bi bi-hospital"></i> HGU Digital Core
+                            </h1>
+                            <p class="text-muted">Sistema de Gestão Hospitalar Militar</p>
+                        </div>
+
+                        <!-- Alert Container -->
+                        <div id="mensagem-alerta"></div>
+
+                        <!-- Login Form -->
+                        <form id="form-login">
+                            <div class="mb-3">
+                                <label for="login" class="form-label form-label-hgu">
+                                    <i class="bi bi-person"></i> Usuário
+                                </label>
+                                <input type="text"
+                                       class="form-control form-control-lg"
+                                       id="login"
+                                       name="login"
+                                       placeholder="Digite seu login"
+                                       required
+                                       autofocus>
+                            </div>
+
+                            <div class="mb-4">
+                                <label for="senha" class="form-label form-label-hgu">
+                                    <i class="bi bi-lock"></i> Senha
+                                </label>
+                                <input type="password"
+                                       class="form-control form-control-lg"
+                                       id="senha"
+                                       name="senha"
+                                       placeholder="Digite sua senha"
+                                       required>
+                            </div>
+
+                            <button type="submit" class="btn btn-hgu-primary btn-lg w-100 mb-3">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>
+                                Entrar no Sistema
+                            </button>
+                        </form>
+
+                        <!-- Loading Indicator -->
+                        <div id="loading" class="d-none">
+                            <div class="text-center py-3">
+                                <div class="spinner-border spinner-hgu" role="status">
+                                    <span class="visually-hidden">Autenticando...</span>
+                                </div>
+                                <p class="mt-2 text-muted">Autenticando...</p>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="text-center mt-4">
+                            <small class="text-muted">
+                                <i class="bi bi-shield-check"></i>
+                                Sistema Seguro e Offline
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Copyright -->
+                <p class="text-center text-white mt-4">
+                    <small>&copy; 2025 HGU Digital Core - Sistema Militar</small>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.getElementById('form-login').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const login = document.getElementById('login').value;
+    const senha = document.getElementById('senha').value;
+    const mensagemDiv = document.getElementById('mensagem-alerta');
+    const loadingDiv = document.getElementById('loading');
+    const form = document.getElementById('form-login');
+
+    // Mostrar loading
+    form.classList.add('d-none');
+    loadingDiv.classList.remove('d-none');
+    mensagemDiv.innerHTML = '';
+
+    try {
+        const resposta = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({ login, senha })
+        });
+
+        const dados = await resposta.json();
+
+        // Esconder loading
+        loadingDiv.classList.add('d-none');
+        form.classList.remove('d-none');
+
+        if (dados.sucesso) {
+            mensagemDiv.innerHTML = `
+                <div class="alert alert-hgu-success alert-dismissible fade show" role="alert">
+                    <i class="bi bi-check-circle me-2"></i>
+                    <strong>Sucesso!</strong> ${dados.mensagem}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            setTimeout(() => {
+                window.location.href = '/dashboard';
+            }, 1000);
+        } else {
+            mensagemDiv.innerHTML = `
+                <div class="alert alert-hgu-error alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle me-2"></i>
+                    <strong>Erro!</strong> ${dados.mensagem}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+        }
+    } catch (erro) {
+        loadingDiv.classList.add('d-none');
+        form.classList.remove('d-none');
+        mensagemDiv.innerHTML = `
+            <div class="alert alert-hgu-error alert-dismissible fade show" role="alert">
+                <i class="bi bi-x-circle me-2"></i>
+                <strong>Erro!</strong> Não foi possível conectar ao servidor.
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+    }
+});
+</script>
+{% endblock %}

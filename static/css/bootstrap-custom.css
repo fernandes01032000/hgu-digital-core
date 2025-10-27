@@ -1,0 +1,472 @@
+/* ============================================================================
+   HGU DIGITAL CORE - Bootstrap Customization
+   Tema: Identidade Visual Militar
+   ============================================================================ */
+
+:root {
+    /* Cores Primárias (Militar) */
+    --hgu-verde-oliva: #556B2F;
+    --hgu-verde-escuro: #3d4f21;
+    --hgu-verde-claro: #6b8e3d;
+
+    /* Cores Secundárias */
+    --hgu-branco: #FFFFFF;
+    --hgu-cinza-claro: #E5E5E5;
+    --hgu-cinza: #999999;
+    --hgu-cinza-escuro: #333333;
+
+    /* Cores de Estado */
+    --hgu-sucesso: #28a745;
+    --hgu-alerta: #ffc107;
+    --hgu-erro: #dc3545;
+    --hgu-info: #17a2b8;
+
+    /* Fontes */
+    --hgu-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ============================================================================
+   GLOBAL STYLES
+   ============================================================================ */
+
+body {
+    font-family: var(--hgu-font-family);
+    color: var(--hgu-cinza-escuro);
+    background-color: #f8f9fa;
+}
+
+/* ============================================================================
+   NAVBAR / HEADER
+   ============================================================================ */
+
+.navbar-hgu {
+    background: linear-gradient(135deg, var(--hgu-verde-oliva) 0%, var(--hgu-verde-escuro) 100%);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar-hgu .navbar-brand {
+    color: var(--hgu-branco) !important;
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-hgu .nav-link {
+    color: rgba(255,255,255,0.9) !important;
+    font-weight: 500;
+    transition: color 0.3s, background-color 0.3s;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+}
+
+.navbar-hgu .nav-link:hover {
+    color: var(--hgu-branco) !important;
+    background-color: rgba(255,255,255,0.1);
+}
+
+.navbar-hgu .nav-link.active {
+    color: var(--hgu-branco) !important;
+    background-color: rgba(255,255,255,0.2);
+}
+
+/* ============================================================================
+   BUTTONS
+   ============================================================================ */
+
+.btn-hgu-primary {
+    background-color: var(--hgu-verde-oliva);
+    border-color: var(--hgu-verde-oliva);
+    color: var(--hgu-branco);
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.btn-hgu-primary:hover {
+    background-color: var(--hgu-verde-escuro);
+    border-color: var(--hgu-verde-escuro);
+    color: var(--hgu-branco);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(85, 107, 47, 0.3);
+}
+
+.btn-hgu-primary:active,
+.btn-hgu-primary:focus {
+    background-color: var(--hgu-verde-escuro);
+    border-color: var(--hgu-verde-escuro);
+    box-shadow: 0 0 0 0.25rem rgba(85, 107, 47, 0.25);
+}
+
+.btn-hgu-secondary {
+    background-color: var(--hgu-cinza);
+    border-color: var(--hgu-cinza);
+    color: var(--hgu-branco);
+}
+
+.btn-hgu-secondary:hover {
+    background-color: var(--hgu-cinza-escuro);
+    border-color: var(--hgu-cinza-escuro);
+    color: var(--hgu-branco);
+}
+
+.btn-logout {
+    background-color: rgba(220, 53, 69, 0.9);
+    border-color: rgba(220, 53, 69, 0.9);
+    color: var(--hgu-branco);
+    font-weight: 500;
+}
+
+.btn-logout:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    color: var(--hgu-branco);
+}
+
+/* ============================================================================
+   CARDS
+   ============================================================================ */
+
+.card-hgu {
+    border: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.card-hgu:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.card-header-hgu {
+    background: linear-gradient(135deg, var(--hgu-verde-oliva) 0%, var(--hgu-verde-escuro) 100%);
+    color: var(--hgu-branco);
+    font-weight: 600;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 1rem 1.25rem;
+}
+
+.card-stats {
+    border-left: 4px solid var(--hgu-verde-oliva);
+}
+
+.card-stats-number {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--hgu-verde-oliva);
+    line-height: 1;
+}
+
+.card-stats-label {
+    color: var(--hgu-cinza);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 0.5rem;
+}
+
+/* ============================================================================
+   FORMS
+   ============================================================================ */
+
+.form-label-hgu {
+    font-weight: 600;
+    color: var(--hgu-cinza-escuro);
+    margin-bottom: 0.5rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--hgu-verde-oliva);
+    box-shadow: 0 0 0 0.25rem rgba(85, 107, 47, 0.25);
+}
+
+.form-control.is-invalid:focus,
+.form-select.is-invalid:focus {
+    border-color: var(--hgu-erro);
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25);
+}
+
+/* ============================================================================
+   ALERTS
+   ============================================================================ */
+
+.alert-hgu-success {
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+    color: #155724;
+    border-left: 4px solid var(--hgu-sucesso);
+}
+
+.alert-hgu-error {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    border-left: 4px solid var(--hgu-erro);
+}
+
+.alert-hgu-warning {
+    background-color: #fff3cd;
+    border-color: #ffeaa7;
+    color: #856404;
+    border-left: 4px solid var(--hgu-alerta);
+}
+
+.alert-hgu-info {
+    background-color: #d1ecf1;
+    border-color: #bee5eb;
+    color: #0c5460;
+    border-left: 4px solid var(--hgu-info);
+}
+
+/* ============================================================================
+   TABLES
+   ============================================================================ */
+
+.table-hgu {
+    background-color: var(--hgu-branco);
+}
+
+.table-hgu thead {
+    background-color: var(--hgu-verde-oliva);
+    color: var(--hgu-branco);
+}
+
+.table-hgu thead th {
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.5px;
+    padding: 1rem;
+}
+
+.table-hgu tbody tr {
+    transition: background-color 0.2s;
+}
+
+.table-hgu tbody tr:hover {
+    background-color: rgba(85, 107, 47, 0.05);
+}
+
+.table-hgu tbody td {
+    padding: 1rem;
+    vertical-align: middle;
+}
+
+/* ============================================================================
+   BADGES
+   ============================================================================ */
+
+.badge-hgu-primary {
+    background-color: var(--hgu-verde-oliva);
+    color: var(--hgu-branco);
+}
+
+.badge-hgu-success {
+    background-color: var(--hgu-sucesso);
+}
+
+.badge-hgu-warning {
+    background-color: var(--hgu-alerta);
+}
+
+.badge-hgu-danger {
+    background-color: var(--hgu-erro);
+}
+
+/* ============================================================================
+   LOADING SPINNER
+   ============================================================================ */
+
+.spinner-hgu {
+    color: var(--hgu-verde-oliva);
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loading-overlay .spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3rem;
+}
+
+/* ============================================================================
+   BREADCRUMBS
+   ============================================================================ */
+
+.breadcrumb-hgu {
+    background-color: transparent;
+    padding: 0.75rem 0;
+    margin-bottom: 1.5rem;
+}
+
+.breadcrumb-hgu .breadcrumb-item.active {
+    color: var(--hgu-verde-oliva);
+    font-weight: 600;
+}
+
+/* ============================================================================
+   PAGINATION
+   ============================================================================ */
+
+.pagination-hgu .page-link {
+    color: var(--hgu-verde-oliva);
+    border-color: var(--hgu-cinza-claro);
+}
+
+.pagination-hgu .page-link:hover {
+    background-color: rgba(85, 107, 47, 0.1);
+    border-color: var(--hgu-verde-oliva);
+}
+
+.pagination-hgu .page-item.active .page-link {
+    background-color: var(--hgu-verde-oliva);
+    border-color: var(--hgu-verde-oliva);
+}
+
+/* ============================================================================
+   MODALS
+   ============================================================================ */
+
+.modal-header-hgu {
+    background: linear-gradient(135deg, var(--hgu-verde-oliva) 0%, var(--hgu-verde-escuro) 100%);
+    color: var(--hgu-branco);
+    border-bottom: none;
+}
+
+.modal-header-hgu .btn-close {
+    filter: invert(1);
+}
+
+/* ============================================================================
+   UTILITIES
+   ============================================================================ */
+
+.text-hgu-primary {
+    color: var(--hgu-verde-oliva) !important;
+}
+
+.bg-hgu-primary {
+    background-color: var(--hgu-verde-oliva) !important;
+}
+
+.border-hgu-primary {
+    border-color: var(--hgu-verde-oliva) !important;
+}
+
+.shadow-hgu {
+    box-shadow: 0 4px 12px rgba(85, 107, 47, 0.15) !important;
+}
+
+/* ============================================================================
+   LOGIN PAGE SPECIFIC
+   ============================================================================ */
+
+.login-container {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667a3e 0%, var(--hgu-verde-oliva) 50%, var(--hgu-verde-escuro) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    background: var(--hgu-branco);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+}
+
+/* ============================================================================
+   DASHBOARD SPECIFIC
+   ============================================================================ */
+
+.quick-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.quick-action-card {
+    text-align: center;
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+}
+
+.quick-action-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--hgu-verde-oliva);
+    box-shadow: 0 6px 16px rgba(85, 107, 47, 0.2);
+}
+
+.quick-action-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+}
+
+/* ============================================================================
+   RESPONSIVE ADJUSTMENTS
+   ============================================================================ */
+
+@media (max-width: 768px) {
+    .navbar-hgu .navbar-brand {
+        font-size: 1.25rem;
+    }
+
+    .card-stats-number {
+        font-size: 2rem;
+    }
+
+    .quick-actions-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+/* ============================================================================
+   PRINT STYLES
+   ============================================================================ */
+
+@media print {
+    .navbar-hgu,
+    .btn,
+    .quick-actions-grid {
+        display: none !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+}

@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentos - HGU Digital Core</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <header class="cabecalho">
+        <div class="cabecalho-container">
+            <h1>🏛️ HGU Digital Core</h1>
+            <div class="cabecalho-usuario">
+                <span>Bem-vindo, <strong>{{ usuario }}</strong></span>
+                <a href="/logout" class="btn-logout">Sair</a>
+            </div>
+        </div>
+    </header>
+    
+    <nav class="navegacao">
+        <ul>
+            <li><a href="/dashboard">Dashboard</a></li>
+            <li><a href="/documentos" class="ativo">Documentos</a></li>
+            <li><a href="/pacientes">Pacientes</a></li>
+            <li><a href="/profissionais">Profissionais</a></li>
+            <li><a href="/auditoria">Auditoria</a></li>
+            <li><a href="/relatorios">Relatórios</a></li>
+        </ul>
+    </nav>
+    
+    <main class="container">
+        <div class="card">
+            <h2 class="card-titulo">📄 Gestão de Documentos</h2>
+            
+            <button onclick="abrirModal('modal-novo-documento')" class="btn btn-primario">
+                ➕ Novo Documento
+            </button>
+        </div>
+        
+        <div class="card">
+            <h3 style="color: #556B2F; margin-bottom: 1rem;">Documentos Recentes</h3>
+            
+            <div id="loading-documentos" class="loading">
+                <div class="spinner"></div>
+                <p>Carregando documentos...</p>
+            </div>
+            
+            <div class="tabela-responsiva">
+                <table class="tabela" id="tabela-documentos">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Tipo</th>
+                            <th>Paciente</th>
+                            <th>Profissional</th>
+                            <th>Status</th>
+                            <th>Data Emissão</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="6" style="text-align: center;">Carregando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Modal Novo Documento -->
+    <div id="modal-novo-documento" class="modal">
+        <div class="modal-conteudo">
+            <div class="modal-cabecalho">
+                <h3>Novo Documento</h3>
+                <span class="modal-fechar" onclick="fecharModal('modal-novo-documento')">&times;</span>
+            </div>
+            
+            <div id="mensagem-modal"></div>
+            
+            <form id="form-novo-documento">
+                <div class="form-grupo">
+                    <label for="tipo_documento">Tipo de Documento *</label>
+                    <select id="tipo_documento" required>
+                        <option value="">Selecione...</option>
+                        {% for tipo in tipos_documentos %}
+                        <option value="{{ tipo }}">{{ tipo }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="paciente_prec">PREC-CP do Paciente *</label>
+                    <input type="text" id="paciente_prec" required>
+                    <button type="button" onclick="buscarPacienteForm()" class="btn btn-secundario" style="margin-top: 0.5rem;">
+                        🔍 Buscar Paciente
+                    </button>
+                    <div id="info-paciente" style="margin-top: 0.5rem; padding: 0.5rem; background-color: #f0f0f0; border-radius: 4px; display: none;">
+                        <strong>Paciente:</strong> <span id="nome-paciente"></span>
+                    </div>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="profissional_id">Profissional Responsável *</label>
+                    <select id="profissional_id" required>
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="setor_origem_id">Setor de Origem *</label>
+                    <select id="setor_origem_id" required>
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                
+                <div class="form-grupo">
+                    <label for="setor_destino_id">Setor de Destino</label>
+                    <select id="setor_destino_id">
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                
+                <div id="campos-especificos">
+                    <!-- Campos específicos do tipo de documento serão inseridos aqui -->
+                </div>
+                
+                <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-primario" style="flex: 1;">Criar Documento</button>
+                    <button type="button" onclick="fecharModal('modal-novo-documento')" class="btn btn-secundario">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script src="/static/js/app.js"></script>
+    <script>
+        let pacienteAtual = null;
+        
+        // Carregar documentos ao abrir a página
+        document.addEventListener('DOMContentLoaded', async function() {
+            await carregarDocumentos();
+            await carregarProfissionais();
+            await carregarSetores();
+        });
+        
+        async function carregarDocumentos() {
+            const loading = document.getElementById('loading-documentos');
+            loading.classList.add('ativo');
+            
+            try {
+                const resposta = await obterDadosAPI('/api/documentos/listar');
+                
+                if (resposta.sucesso) {
+                    preencherTabela('tabela-documentos', resposta.documentos, 
+                        ['codigo_unico', 'tipo_documento', 'paciente_nome', 'profissional_nome', 'status', 'data_emissao']);
+                }
+            } catch (erro) {
+                console.error('Erro ao carregar documentos:', erro);
+            }
+            
+            loading.classList.remove('ativo');
+        }
+        
+        async function carregarProfissionais() {
+            try {
+                const profissionais = await listarProfissionais();
+                preencherSelect('profissional_id', profissionais, 'id', 'nome');
+            } catch (erro) {
+                console.error('Erro ao carregar profissionais:', erro);
+            }
+        }
+        
+        async function carregarSetores() {
+            try {
+                const setores = await listarSetores();
+                preencherSelect('setor_origem_id', setores, 'id', 'nome');
+                preencherSelect('setor_destino_id', setores, 'id', 'nome');
+            } catch (erro) {
+                console.error('Erro ao carregar setores:', erro);
+            }
+        }
+        
+        async function buscarPacienteForm() {
+            const prec = document.getElementById('paciente_prec').value;
+            const mensagemDiv = document.getElementById('mensagem-modal');
+            const infoPaciente = document.getElementById('info-paciente');
+            
+            if (!prec) {
+                mensagemDiv.innerHTML = '<div class="alerta alerta-aviso">Digite o PREC-CP</div>';
+                return;
+            }
+            
+            try {
+                const resposta = await buscarPaciente(prec);
+                
+                if (resposta.sucesso) {
+                    pacienteAtual = resposta.paciente;
+                    document.getElementById('nome-paciente').textContent = pacienteAtual.nome_completo;
+                    infoPaciente.style.display = 'block';
+                    mensagemDiv.innerHTML = '';
+                } else {
+                    mensagemDiv.innerHTML = '<div class="alerta alerta-erro">Paciente não encontrado. Cadastre primeiro.</div>';
+                    infoPaciente.style.display = 'none';
+                }
+            } catch (erro) {
+                mensagemDiv.innerHTML = '<div class="alerta alerta-erro">Erro ao buscar paciente</div>';
+            }
+        }
+        
+        document.getElementById('form-novo-documento').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const mensagemDiv = document.getElementById('mensagem-modal');
+            
+            if (!pacienteAtual) {
+                mensagemDiv.innerHTML = '<div class="alerta alerta-erro">Busque um paciente primeiro</div>';
+                return;
+            }
+            
+            const dados = {
+                tipo_documento: document.getElementById('tipo_documento').value,
+                paciente_id: pacienteAtual.id,
+                profissional_id: document.getElementById('profissional_id').value,
+                setor_origem_id: document.getElementById('setor_origem_id').value,
+                setor_destino_id: document.getElementById('setor_destino_id').value || null,
+                conteudo: {
+                    paciente_nome: pacienteAtual.nome_completo,
+                    paciente_prec: pacienteAtual.prec_cp
+                }
+            };
+            
+            try {
+                const resposta = await fazerRequisicaoAPI('/api/documentos/criar', dados);
+                
+                if (resposta.sucesso) {
+                    mensagemDiv.innerHTML = `<div class="alerta alerta-sucesso">Documento ${resposta.codigo} criado com sucesso!</div>`;
+                    setTimeout(() => {
+                        fecharModal('modal-novo-documento');
+                        carregarDocumentos();
+                        document.getElementById('form-novo-documento').reset();
+                        pacienteAtual = null;
+                        document.getElementById('info-paciente').style.display = 'none';
+                    }, 2000);
+                } else {
+                    mensagemDiv.innerHTML = `<div class="alerta alerta-erro">${resposta.mensagem}</div>`;
+                }
+            } catch (erro) {
+                mensagemDiv.innerHTML = '<div class="alerta alerta-erro">Erro ao criar documento</div>';
+            }
+        });
+    </script>
+</body>
+</html>
+
